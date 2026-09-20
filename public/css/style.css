@@ -1,0 +1,802 @@
+/* 
+   VÊNUS - Portal do Profissional - Login
+    */
+
+:root {
+    --maroon-dark: #6b1330;
+    --maroon: #9E182B;
+    --maroon-light: #a83a56;
+    --pink-bg: #fdf3f1;
+    --pink-soft: rgba(255, 255, 255, 0.12);
+    --white: #ffffff;
+    --text-dark: #3a2530;
+    --text-muted: #8a7680;
+    --border: #eadfe1;
+    --font: 'Poppins', Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font);
+    background-color: var(--pink-bg);
+    color: var(--text-dark);
+}
+
+/* ============ LAYOUT ============ */
+
+.login-page {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* ============ LEFT SIDE ============ */
+
+.login-left {
+    position: relative;
+    flex: 0 0 42%;
+    max-width: 42%;
+    background: linear-gradient(160deg, var(--maroon-dark), var(--maroon));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    overflow: hidden;
+}
+
+.decor-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--pink-soft);
+}
+
+.decor-circle--top {
+    width: 220px;
+    height: 220px;
+    top: -60px;
+    right: -80px;
+}
+
+.decor-circle--bottom {
+    width: 260px;
+    height: 260px;
+    bottom: -100px;
+    left: -100px;
+}
+
+.brand {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.brand .logo {
+    max-width: 260px;
+    width: 100%;
+    height: auto;
+}
+
+.info-card {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 340px;
+    min-height: 190px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 28px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.info-badge {
+    display: inline-block;
+    width: fit-content;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.18);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.info-card h2 {
+    color: var(--white);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.info-card p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+/* ============ RIGHT SIDE ============ */
+
+.login-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 420px;
+    background: var(--white);
+    border-radius: 18px;
+    padding: 40px 40px 32px;
+    box-shadow: 0 10px 40px rgba(147, 32, 63, 0.08);
+}
+
+.eyebrow {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--maroon);
+    margin-bottom: 8px;
+}
+
+.login-box h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+}
+
+/* ============ FORM ============ */
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.field {
+    margin-bottom: 18px;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: var(--font);
+    color: var(--text-dark);
+    background: var(--pink-bg);
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.field input::placeholder {
+    color: #c8b6bc;
+}
+
+.field input:focus {
+    border-color: var(--maroon);
+    background: var(--white);
+}
+
+.alert-error {
+    background: #fdecec;
+    border: 1px solid #f5c6c6;
+    color: #b42318;
+    font-size: 13px;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+}
+
+.alert-error ul {
+    list-style: none;
+}
+
+.field-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.checkbox input {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--maroon);
+    cursor: pointer;
+}
+
+.link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--maroon);
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Botões  */
+
+.btn-primary {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: var(--maroon);
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-primary:hover {
+    background: var(--maroon-dark);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.divider span {
+    padding: 0 12px;
+}
+
+.btn-google {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--text-dark);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.15s ease;
+}
+
+.btn-google:hover {
+    background: var(--pink-bg);
+}
+
+.google-icon {
+    font-weight: 700;
+    color: #a51a44;
+    font-size: 15px;
+}
+
+.signup {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 22px;
+}
+
+.signup a {
+    color: var(--maroon);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signup a:hover {
+    text-decoration: underline;
+}
+
+.footer-note {
+    max-width: 420px;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 20px;
+    line-height: 1.5;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 900px) {
+    .login-left {
+        display: none;
+    }
+
+    .login-right {
+        flex: 1;
+        max-width: 100%;
+    }
+}
+
+/* ============ TELA "ESQUECI MINHA SENHA" ============ */
+
+.back-link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 24px;
+}
+
+.back-link:hover {
+    color: var(--maroon);
+}
+
+.icon-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: var(--pink-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.icon-envelope {
+    font-size: 22px;
+    color: var(--maroon);
+}
+
+.alert-success {
+    background: #eafaf0;
+    border: 1px solid #bfe8cf;
+    color: #1e7a45;
+    font-size: 13px;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+}
+
+.login-box .footer-note {
+    margin-top: 16px;
+    text-align: center;
+}
+
+/* ============ AJUSTES - TELA "ESQUECI MINHA SENHA" ============ */
+
+.recuperar-senha-page .login-box h1 {
+    color: #781422;
+}
+
+.recuperar-senha-page .login-box {
+    max-width: 480px;
+    padding: 34px 42px 30px;
+}
+
+.recuperar-senha-page .back-link {
+    margin-bottom: 16px;
+}
+
+.recuperar-senha-page .icon-circle {
+    margin-bottom: 14px;
+}
+
+.recuperar-senha-page .subtitle {
+    margin-bottom: 20px;
+}
+
+/* ============ TELA DE CADASTRO (WIZARD) ============ */
+
+.cadastro-page,
+.cadastro-page .login-page {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.cadastro-page .login-right {
+    height: 100%;
+    overflow: hidden;
+}
+
+.cadastro-page .login-box.cadastro-box {
+    max-width: 620px;
+    padding: 32px 44px 30px;
+    max-height: 92vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.cadastro-page .login-box.cadastro-box h1 {
+    color: #781422;
+}
+
+/* ---------- Stepper ---------- */
+
+.stepper {
+    display: flex;
+    align-items: center;
+    margin: 20px 0 22px;
+    width: 100%;
+}
+
+.step {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.step-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--pink-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.step-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.step.active .step-circle {
+    background: var(--maroon);
+    border-color: var(--maroon);
+    color: var(--white);
+}
+
+.step.active .step-label {
+    color: var(--maroon);
+}
+
+.step.completed .step-circle {
+    background: var(--maroon-light);
+    border-color: var(--maroon-light);
+    color: var(--white);
+}
+
+.step-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin: 0 6px;
+}
+
+/* ---------- Passos do formulário ---------- */
+
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.step-count {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--maroon);
+    margin-bottom: 4px;
+}
+
+.step-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+}
+
+.step-subtitle {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+}
+
+.field-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.field-row-2 .field {
+    margin-bottom: 18px;
+}
+
+.field select,
+.field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: var(--font);
+    color: var(--text-dark);
+    background: var(--pink-bg);
+    outline: none;
+    transition: border-color 0.15s ease;
+    resize: vertical;
+}
+
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--maroon);
+    background: var(--white);
+}
+
+.field-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: -10px 0 16px;
+}
+
+.field-hint--top {
+    margin: -2px 0 10px;
+}
+
+/* ---------- Campo de senha com olho ---------- */
+
+.input-password {
+    position: relative;
+}
+
+.input-password input {
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    opacity: 0.6;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+}
+
+/* ---------- Upload de arquivos ---------- */
+
+.upload-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.upload-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    background: var(--pink-bg);
+    transition: border-color 0.15s ease;
+}
+
+.upload-box:hover {
+    border-color: var(--maroon);
+}
+
+.upload-box--big {
+    align-items: flex-start;
+}
+
+.upload-icon {
+    font-size: 16px;
+    color: var(--maroon);
+    flex-shrink: 0;
+}
+
+.upload-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.upload-text strong {
+    font-size: 13px;
+    color: var(--text-dark);
+}
+
+.upload-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.upload-filename {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* ---------- Checkbox de termos ---------- */
+
+.terms-checkbox {
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.terms-checkbox input {
+    margin-top: 2px;
+}
+
+/* ---------- Tipo de atendimento (pills) ---------- */
+
+.attend-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.attend-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-dark);
+    cursor: pointer;
+    background: var(--pink-bg);
+}
+
+.attend-pill input {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--maroon);
+    cursor: pointer;
+}
+
+/* ---------- Nota informativa ---------- */
+
+.info-note {
+    background: var(--pink-bg);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 4px 0 20px;
+}
+
+/* ---------- Revisão ---------- */
+
+.review-list {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 18px;
+}
+
+.review-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-label {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.review-value {
+    color: var(--text-dark);
+    text-align: right;
+}
+
+/* ---------- Botões do wizard ---------- */
+
+.wizard-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.wizard-actions .btn-primary,
+.wizard-actions .btn-outline {
+    flex: 1;
+    width: auto;
+}
+
+.btn-outline {
+    padding: 13px;
+    border: 1px solid var(--maroon);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--maroon);
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-outline:hover {
+    background: var(--pink-bg);
+}
+
+@media (max-width: 900px) {
+    .field-row-2 {
+        grid-template-columns: 1fr;
+    }
+}
