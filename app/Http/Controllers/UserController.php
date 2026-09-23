@@ -137,6 +137,77 @@ class UserController extends Controller
         return view('user.update-profissional', compact('profissional'));
     }
 
+    public function atualizar(Request $request)
+    {
+        $profissional = User::find(session('id'));
+
+        if (!$profissional) {
+            return redirect('/')->with('erro', 'Profissional não encontrado.');
+        }
+
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:tbProfissional,emailProfissional,' . $profissional->id . ',id',
+            
+            'telefone' => 'required|string|max:15',
+            'dataNasc' => 'required|date',
+            'categoria' => 'required|string|max:17',
+            'especialidade' => 'required|string|max:255',
+            'conselho' => 'required|string|max:5',
+            'numConselho' => 'required|string|max:9',
+            'ufConselho' => 'required|string|max:2',
+            'apresentacao' => 'nullable|string|max:400',
+
+            'fotoPerfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+
+            'atendeChat' => 'boolean',
+            'atendeDuvidaRapido' => 'boolean',
+            'atendePresencial' => 'boolean',
+        ], [
+            'nome.required' => 'Campo nome obrigatório.',
+            'email.required' => 'Campo email obrigatório.',
+            'email.email' => 'Informe um e-mail válido.',
+            
+            'telefone.required' => 'Campo telefone obrigatório.',
+            'dataNasc.required' => 'Campo data de nascimento obrigatório.',
+            'categoria.required' => 'Campo categoria obrigatório.',
+            'especialidade.required' => 'Campo especialidade obrigatório.',
+            'conselho.required' => 'Campo conselho obrigatório.',
+            'numConselho.required' => 'Campo número do conselho obrigatório.',
+            'ufConselho.required' => 'Campo UF do conselho obrigatório.',
+            'fotoPerfil.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp.',
+            'fotoPerfil.max' => 'O arquivo deve ter no máximo 2 MB.',
+        ]);
+
+        $profissional->nomeProfissional = $request->nome;
+        $profissional->emailProfissional = $request->email;
+        $profissional->telefoneProfissional = $request->telefone;
+        $profissional->dataNascProfissional = $request->dataNasc;
+        $profissional->categoriaProfissional = $request->categoria;
+        $profissional->especialidadeProfissional = $request->especialidade;
+        $profissional->conselhoClasseProfissional = $request->conselho;
+        $profissional->numConselhoProfissional = $request->numConselho;
+        $profissional->ufConselhoProfissional = $request->ufConselho;
+        $profissional->apresentacaoProfissional = $request->apresentacao;
+
+        $profissional->atendeChatProfissional = $request->boolean('atendeChat');
+        $profissional->atendeDuvidaRapidoProfissional = $request->boolean('atendeDuvidaRapido');
+        $profissional->atendePresencialProfissional = $request->boolean('atendePresencial');
+
+        // Atualiza a foto somente se o usuário enviar uma nova
+        if ($request->hasFile('fotoPerfil')) {
+            $profissional->fotoPerfilProfissional = $request->file('fotoPerfil');
+        }
+
+        $profissional->save();
+
+        return redirect('user.perfil-profissional')
+            ->with('sucesso', 'Perfil atualizado com sucesso!');
+        
+    
+    }
+
+
     public function mudarSenha()
     {
         return view('user.mudar-senha');
@@ -174,6 +245,12 @@ class UserController extends Controller
         session()->forget('id');
 
         return redirect('/')->with('sucesso', 'Sua conta foi desativada.');
+    }
+
+    public function dashboard(){
+        $profissional = User::find(session('id'));
+
+        return view('painelProfissional.dashboard', compact('profissional'));
     }
 
     public function indexApi()
