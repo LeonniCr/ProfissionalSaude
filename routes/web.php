@@ -28,16 +28,13 @@ Route::post('emails.redefinir-senha/{chave}', [ForgotPasswordController::class, 
 //privadas
 Route::middleware('autenticacao')->group(function () {
     
-Route::get('/dashboard', function () {
-    return view('painelProfissional.dashboard');
-})->name('painel.dashboard');
+Route::get('/dashboard', [UserController::class, 'dashboard'])->name('painel.dashboard');
 
 Route::get('user.perfil-profissional', [UserController::class, 'perfil']);
 
-Route::get('user.update-profissional', function () {
-    return view('user.update-profissional');
-});
-Route::get('user.update-profissional', [UserController::class, 'editar'])->name('perfil.atualizar');
+Route::get('user.update-profissional', [UserController::class, 'editar'])->name('perfil.editar');
+Route::put('user.update-profissional', [UserController::class, 'atualizar'])->name('perfil.atualizar');
+
 
 Route::get('user.mudar-senha', [UserController::class, 'mudarSenha']);
 Route::put('user.mudar-senha', [UserController::class, 'atualizarSenha'])->name('senha.atualizar');
