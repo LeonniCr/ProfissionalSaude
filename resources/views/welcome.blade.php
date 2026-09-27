@@ -50,6 +50,12 @@
                     </div>
                 @endif
 
+                @if (session('erro'))
+                    <div class="alert-error">
+                        {{ session('erro') }}
+                    </div>
+                @endif
+
                 <form action="/login" method="post" class="login-form">
                     @csrf
 
@@ -57,7 +63,7 @@
                         <label for="emailProfissional">E-mail</label>
                         <input
                             type="text"
-                            name="senha"
+                            name="email"
                             id="emailProfissional"
                             placeholder="seu@Email.com"
                             value="{{ old('email') }}"
