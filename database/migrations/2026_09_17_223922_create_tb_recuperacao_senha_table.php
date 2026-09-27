@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('tbRecuperacaoSenha', function (Blueprint $table) {
             $table->id();
-            $table->string('emailProfissional');
+            $table->string('emailProfissionalSaude', 150);
             $table->string('chave');
             $table->timestamps();
         });
