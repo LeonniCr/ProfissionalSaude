@@ -9,7 +9,7 @@ class RecuperacaoSenha extends Model
     protected $table = 'tbRecuperacaoSenha';
 
     protected $fillable = [
-        'emailProfissional',
+        'emailProfissionalSaude',
         'chave',
     ];
 }
