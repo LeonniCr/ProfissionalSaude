@@ -34,7 +34,7 @@
                 <div class="nav-group">
                     <p class="nav-group-label">Principal</p>
 
-                    <a href="{{ url('/painel') }}" class="nav-item">
+                    <a href="{{ url('/dashboard') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8" /><path d="M5 10v10h14V10" /></svg>
                         <span>Painel</span>
                     </a>
@@ -105,8 +105,8 @@
                 <div class="sidebar-user">
                     <span class="avatar-circle">{{ $inicial }}</span>
                     <div class="sidebar-user-info">
-                        <strong>{{ $profissional->nomeProfissional }}</strong>
-                        <span>{{ $profissional->especialidadeProfissional }}</span>
+                        <strong>{{ $profissional->nomeProfissionalSaude }}</strong>
+                        <span>{{ $profissional->especialidadeProfissionalSaude }}</span>
                     </div>
                 </div>
 
@@ -138,7 +138,7 @@
                     <div class="topbar-user">
                         <span class="avatar-circle">{{ $inicial }}</span>
                         <div class="topbar-user-info">
-                            <strong>{{ $profissional->nomeProfissional }}</strong>
+                            <strong>{{ $profissional->nomeProfissionalSaude }}</strong>
                         </div>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
 
                         <div class="profile-card-head">
                             <div>
-                                <h2>{{ $profissional->nomeProfissional }}</h2>
+                                <h2>{{ $profissional->nomeProfissionalSaude }}</h2>
                                 <p>Dados profissionais &middot; Estas informações aparecem no perfil público.</p>
                             </div>
 
@@ -181,33 +181,39 @@
                         <div class="field-grid-2 field-view">
                             <div>
                                 <label>Email</label>
-                                <div class="field-display">{{ $profissional->emailProfissional }}</div>
+                                <div class="field-display">{{ $profissional->emailProfissionalSaude }}</div>
                             </div>
                             <div>
-                                <label>CPF</label>
-                                <div class="field-display">{{ $profissional->cpfProfissional }}</div>
+                                <label>CPF ou CNPJ</label>
+                                <div class="field-display">{{ $profissional->nrFiscalProfissional ?? '-' }}</div>
                             </div>
                         </div>
 
                         <div class="field-grid-2 field-view">
                             <div>
                                 <label>Telefone</label>
-                                <div class="field-display">{{ $profissional->telefoneProfissional }}</div>
+                                <div class="field-display">{{ $profissional->telProfissionalSaude ?? '-' }}</div>
                             </div>
-                            <div>
-                                <label>Data de Nascimento</label>
-                                <div class="field-display">{{ $profissional->dataNascProfissional }}</div>
+                            <div class="field-grid-2 field-view">
+                                <div>
+                                    <label>CEP</label>
+                                    <div class="field-display">{{ $profissional->cepProfissional ?? '-' }}</div>
+                                </div>
+                                <div>
+                                    <label>UF</label>
+                                    <div class="field-display">{{ $profissional->ufProfissional ?? '-' }}</div>
+                                </div>
                             </div>
                         </div>
 
                         <div class="field-grid-2 field-view">
                             <div>
-                                <label>Conselho de Classe</label>
-                                <div class="field-display">{{ $profissional->conselhoClasseProfissional }}-{{ $profissional->ufConselhoProfissional }} {{ $profissional->numConselhoProfissional }}</div>
+                                <label>País</label>
+                                <div class="field-display">{{ $profissional->paisProfissional ?? '-' }}</div>
                             </div>
                             <div>
-                                <label>Localidade</label>
-                                <div class="field-display">{{ $profissional->ufConselhoProfissional }}</div>
+                                <label>Cidade</label>
+                                <div class="field-display">{{ $profissional->cidadeProfissional ?? '-' }}</div>
                             </div>
                         </div>
 
@@ -218,48 +224,13 @@
                             </div>
                             <div>
                                 <label>Especialidade</label>
-                                <div class="field-display">{{ $profissional->especialidadeProfissional }}</div>
+                                <div class="field-display">{{ $profissional->especialidadeProfissionalSaude ?? '-' }}</div>
                             </div>
                         </div>
 
                         <div class="field-view" style="margin-bottom: 20px;">
                             <label>Apresentação profissional</label>
-                            <div class="field-display" style="white-space: pre-line;">{{ $profissional->apresentacaoProfissional }}</div>
-                        </div>
-
-                        <div class="toggle-row">
-                            <div class="toggle-item">
-                                <div class="toggle-item-text">
-                                    <strong>Consulta por chat</strong>
-                                    <span>Atendimento individual por conversa</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" disabled {{ $profissional->atendeChatProfissional ? 'checked' : '' }}>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-
-                            <div class="toggle-item">
-                                <div class="toggle-item-text">
-                                    <strong>Dúvida rápida</strong>
-                                    <span>Respostas assíncronas rápidas</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" disabled {{ $profissional->atendeDuvidaRapidoProfissional ? 'checked' : '' }}>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-
-                            <div class="toggle-item">
-                                <div class="toggle-item-text">
-                                    <strong>Presencial em parceria</strong>
-                                    <span>Disponibilidade presencial</span>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" disabled {{ $profissional->atendePresencialProfissional ? 'checked' : '' }}>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                            <div class="field-display" style="white-space: pre-line;">{{ $profissional->apresentacaoProfissional ?? '-' }}</div>
                         </div>
 
                         <div class="danger-zone">
@@ -282,21 +253,9 @@
                             Verificado
                         </div>
 
-                        <p class="preview-name">{{ $profissional->nomeProfissional }}</p>
-                        <p class="preview-specialty">{{ $profissional->especialidadeProfissional }}</p>
+                        <p class="preview-name">{{ $profissional->nomeProfissionalSaude }}</p>
+                        <p class="preview-specialty">{{ $profissional->especialidadeProfissionalSaude }}</p>
                         <p class="preview-bio">{{ $profissional->apresentacaoProfissional }}</p>
-
-                        <div class="preview-badges">
-                            @if ($profissional->atendeChatProfissional)
-                                <span class="badge-pill">Chat</span>
-                            @endif
-                            @if ($profissional->atendeDuvidaRapidoProfissional)
-                                <span class="badge-pill">Dúvida rápida</span>
-                            @endif
-                            @if ($profissional->atendePresencialProfissional)
-                                <span class="badge-pill">Presencial</span>
-                            @endif
-                        </div>
                     </div>
 
                 </div>
