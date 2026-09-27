@@ -30,7 +30,7 @@
                 <div class="nav-group">
                     <p class="nav-group-label">Principal</p>
 
-                    <a href="{{ url('/painel') }}" class="nav-item active">
+                    <a href="{{ url('/dashboard') }}" class="nav-item active">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8" /><path d="M5 10v10h14V10" /></svg>
                         <span>Painel</span>
                     </a>
@@ -134,7 +134,7 @@
                     <div class="topbar-user">
                         <span class="avatar-circle">P</span>
                         <div class="topbar-user-info">
-                            <strong>Profissional</strong>
+                            <strong>{{ $profissional->nomeProfissionalSaude }}</strong>
                         </div>
                     </div>
                 </div>
