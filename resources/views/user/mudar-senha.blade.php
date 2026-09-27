@@ -7,7 +7,7 @@
     <title>Mudar senha</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 
@@ -39,23 +39,51 @@
 
                 <p class="subtitle">Confirme sua senha atual e defina uma nova.</p>
 
-                <form action="{{ route('senha.atualizar') }}" method="POST" class="login-form">
+                @if ($errors->any())
+                    <div class="alert-error">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @if (session('erro'))
+                    <div class="alert-error">
+                        {{ session('erro') }}
+                    </div>
+                @endif
+
+                <form action="{{ route('senha.atualizar') }}" method="POST" class="login-form" id="form-senha">
                     @csrf
                     @method('PUT')
 
                     <div class="field">
                         <label for="senhaAtual">Senha atual</label>
-                        <input type="password" name="senhaAtual" id="senhaAtual" required>
+
+                        <div class="input-password">
+                            <input type="password" name="senhaAtual" id="senhaAtual" placeholder="Digite sua senha atual" required>
+                            <button type="button" class="toggle-password" data-target="senhaAtual" aria-label="Mostrar senha">&#128065;</button>
+                        </div>
                     </div>
 
                     <div class="field">
                         <label for="novaSenha">Nova senha</label>
-                        <input type="password" name="novaSenha" id="novaSenha" required>
+                        
+                        <div class="input-password">
+                            <input type="password" name="novaSenha" id="novaSenha" placeholder="Digite uma senha forte" required>
+                            <button type="button" class="toggle-password" data-target="novaSenha" aria-label="Mostrar senha">&#128065;</button>
+                        </div>
                     </div>
 
                     <div class="field">
                         <label for="confirmarSenha">Confirmar nova senha</label>
-                        <input type="password" name="confirmarSenha" id="confirmarSenha" required>
+
+                        <div class="input-password">
+                            <input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="Repita sua nova senha" required>
+                            <button type="button" class="toggle-password" data-target="confirmarSenha" aria-label="Mostrar senha">&#128065;</button>
+                        </div>
                     </div>
 
                     <div class="field-row">
@@ -72,6 +100,17 @@
         </main>
 
     </div>
+
+    <script>
+        var form = document.getElementById('form-senha');
+
+        form.querySelectorAll('.toggle-password').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var input = document.getElementById(btn.dataset.target);
+                input.type = input.type === 'password' ? 'text' : 'password';
+            });
+        });
+    </script>
 </body>
 
 </html>
