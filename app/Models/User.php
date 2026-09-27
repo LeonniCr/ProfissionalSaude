@@ -12,7 +12,9 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-    protected $table = 'tbProfissional';
+    protected $table = 'tbprofissionalsaude';
+    const CREATED_AT = 'dataCadastro';
+    const UPDATED_AT = 'dataAtualizacao';
 
     /**
      * The attributes that are mass assignable.
@@ -20,26 +22,24 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'nomeProfissional',
-        'emailProfissional',
-        'cpfProfissional',
-        'telefoneProfissional',
-        'dataNascProfissional',
-        'senhaProfissional',
+        'nomeProfissionalSaude',
+        'emailProfissionalSaude',
+        'telProfissionalSaude',
+        'senhaProfissionalSaude',
+        'duasEtapasAtiva',
+        'provedorLoginProfissional',
+        'googleIdProfissional',
         'categoriaProfissional',
-        'especialidadeProfissional',
-        'conselhoClasseProfissional',
-        'numConselhoProfissional',
-        'ufConselhoProfissional',
-        'comprovanteConselhoProfissional',
-        'docComplementarProfissional',
+        'especialidadeProfissionalSaude',
         'apresentacaoProfissional',
+        'paisProfissional',
+        'cidadeProfissional',
+        'ufProfissional',
+        'cepProfissional',
+        'nrFiscalProfissional',
         'fotoPerfilProfissional',
-        'atendeChatProfissional',
-        'atendeDuvidaRapidoProfissional',
-        'atendePresencialProfissional',
-        'statusVerificacaoProfissional',
-        'statusContaProfissional',
+        'statusVerificacao',
+        'statusConta',
     ];
 
     /**
@@ -48,7 +48,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'senhaProfissional',
+        'senhaProfissionalSaude',
         'remember_token',
     ];
 
