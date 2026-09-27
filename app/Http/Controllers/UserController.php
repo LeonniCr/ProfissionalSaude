@@ -18,69 +18,71 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => 'required|email|unique:tbProfissional,emailProfissional|max:255',
-            'cpf' => 'required|string|max:14|unique:tbProfissional,cpfProfissional',
-            'telefone' => 'required|string|max:15',
-            'dataNasc' => 'required|date',
-            'senha' => 'required|string|min:8',
-            'categoria' => 'required|string|max:17',
-            'especialidade' => 'required|string|max:255',
-            'conselho' => 'required|string|max:5',
-            'numConselho' => 'required|string|max:9',
-            'ufConselho' => 'required|string|max:2',
-            'comprovanteConselho' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'docComplementar' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'nome' => 'required|string|max:120',
+            'email' => 'required|email|unique:tbprofissionalsaude,emailProfissionalSaude|max:150',
+            'telefone' => 'nullable|string|max:14|unique:tbprofissionalsaude,telProfissionalSaude',
+            'senha' => 'required|string|max:255|min:8',
+            'categoria' => 'required|string',
+            'especialidade' => 'nullable|string|max:25',
             'apresentacao' => 'nullable|string|max:400',
+            'pais' => 'nullable|string|max:60',
+            'cidade' => 'nullable|string|max:100',
+            'uf' => 'nullable|string|max:2',
+            'cep' => 'nullable|string|max:10',
+            'nrFiscal' => 'nullable|string|max:20|unique:tbprofissionalsaude,nrFiscalProfissional',
             'fotoPerfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'atendeChat' => 'boolean',
-            'atendeDuvidaRapido' => 'boolean',
-            'atendePresencial' => 'boolean',
         ], [
             'nome.required' => 'Campo nome obrigatório.',
+            'nome.max' => 'O nome deve ter no máximo 120 caracteres.',
+
             'email.required' => 'Campo email obrigatório.',
             'email.email' => 'Informe um e-mail válido.',
-            'cpf.required' => 'Campo CPF obrigatório.',
-            'telefone.required' => 'Campo telefone obrigatório.',
-            'dataNasc.required' => 'Campo data de nascimento obrigatório.',
+            'email.unique' => 'Esse email já foi cadastrado',
+            'email.max' => 'O e-mail deve ter no máximo 150 caracteres.',
+
+            'telefone.max' => 'O telefone deve ter no máximo 14 caracteres.',
+            'telefone.unique' => 'Esse telefone já está cadastrado',
+
             'senha.required' => 'Campo senha obrigatório.',
+            'senha.max' => 'A senha deve ter no máximo 255 caracteres.',
+            'senha.min' => 'A senha deve ter no mínimo 8 caracteres',
+
             'categoria.required' => 'Campo categoria obrigatório.',
-            'especialidade.required' => 'Campo especialidade  obrigatório.',
-            'conselho.required' => 'Campo conselho obrigatório.',
-            'numConselho.required' => 'Campo número do conselho obrigatório.',
-            'ufConselho.required' => 'Campo UF do conselho obrigatório.',
-            'comprovanteConselho.required' => 'Campo comprovante do conselho obrigatório.',
-            'comprovanteConselho.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp.',
-            'comprovanteConselho.max' => 'O arquivo deve ter no máximo 2 MB.',
-            'docComplementar.required' => 'Campo documento complementar obrigatório',
-            'docComplementar.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp.',
-            'docComplementar.max' => 'O arquivo deve ter no máximo 2 MB.',
+            'especialidade.max' => 'A especialidade deve ter no máximo 25 caracteres.',
+            'apresentacao.max' => 'A apresentação deve ter no máximo 400 caracteres.',
+
+            'pais.max' => 'O país deve ter no máximo 60 caracteres',
+            'cidade.max' => 'A cidade deve ter no máximo 100 caracteres',
+            'uf.max' => 'O UF deve ter no máximo 2 caracteres',
+            'cep.max' => 'O CEP deve ter no máximo 10 caracteres',
+
+            'nrFiscal' => 'O CPF  ou CPNJ devem ter no máximo 20 caracteres',
+            'nrFiscal.unique' => 'Esse CPF ou CNPJ já foi cadastrado',
+
             'fotoPerfil.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp',
             'fotoPerfil.max' => 'O arquivo deve ter no máximo 2 MB',
 
         ]);
 
         User::create([
-            'nomeProfissional' => $request->nome,
-            'emailProfissional' => $request->email,
-            'cpfProfissional' => $request->cpf,
-            'telefoneProfissional' => $request->telefone,
-            'dataNascProfissional' => $request->dataNasc,
-            'senhaProfissional' => Hash::make($request->senha),
+            'nomeProfissionalSaude' => $request->nome,
+            'emailProfissionalSaude' => $request->email,
+            'telProfissionalSaude' => $request->telefone,
+            'senhaProfissionalSaude' => Hash::make($request->senha),
+            'duasEtapasAtiva' => false,
+            'provedorLoginProfissional' => 'Local',
+            'googleIdProfissional' => null,
             'categoriaProfissional' => $request->categoria,
-            'especialidadeProfissional' => $request->especialidade,
-            'conselhoClasseProfissional' => $request->conselho,
-            'numConselhoProfissional' => $request->numConselho,
-            'ufConselhoProfissional' => $request->ufConselho,
-            'comprovanteConselhoProfissional' => $request->comprovanteConselho,
-            'docComplementarProfissional' => $request->docComplementar,
+            'especialidadeProfissionalSaude' => $request->especialidade,
             'apresentacaoProfissional' => $request->apresentacao,
+            'paisProfissional' => $request->pais,
+            'cidadeProfissional'=> $request->cidade,
+            'ufProfissional'=>$request->uf,
+            'cepProfissional'=>$request->cep,
+            'nrFiscalProfissional'=>$request->nrFiscal,
             'fotoPerfilProfissional' => $request->fotoPerfil,
-            'atendeChatProfissional' => $request->boolean('atendeChat'),
-            'atendeDuvidaRapidoProfissional' => $request->boolean('atendeDuvidaRapido'),
-            'atendePresencialProfissional' => $request->boolean('atendePresencial'),
-            'statusVerificacaoProfissional' => 'em_analise',
-            'statusContaProfissional' => 'ativa',
+            'statusVerificacao' => 'Em análise',
+            'statusConta' => 'Ativa',
         ]);
 
         return redirect('/')->with('sucesso', 'Conta criada com sucesso!');
@@ -89,28 +91,31 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'login' => 'required|string',
+            'email' => 'required|string',
             'senha' => 'required|string',
         ], [
-            'login.required' => 'Campo obrigatório.',
-            'senha.required' => 'Campo obrigatório.',
+            'email.required' => 'Campo email obrigatório.',
+            'email.email' => 'Informe um e-mail válido.',
+            'senha.required' => 'Campo senha obrigatório.',
         ]);
 
-        $user = User::where('emailProfissional', $request->login)
-            ->orWhere('numConselhoProfissional', $request->login)
-            ->first();
+        $user = User::where('emailProfissionalSaude', $request->email)->first();
 
-        if ($user && $user->statusContaProfissional == 'desabilitada') {
+        if(!$user){
+            return redirect('/')->with('erro', 'E-mail não encontrado.');
+        }elseif ($user && $user->statusConta == 'Excluída') {
             return redirect('/')->with('erro', 'Esta conta não existe.');
-        }elseif (!$user || !Hash::check($request->senha, $user->senhaProfissional)) {
-            return redirect('/')->with('erro', 'Email/Número do conselho ou senha incorretos');
+        } elseif ($user && $user->statusConta == 'Suspensa') {
+            return redirect('/')->with('erro', 'Esta conta está suspensa.');
+        } elseif (!Hash::check($request->senha, $user->senhaProfissionalSaude)) {
+            return redirect('/')->with('erro', 'Senha incorreta.');
         }
 
         $request->session()->regenerate();
 
         session([
-            'id' => $user->id,
-            'nomeProfissional' => $user->nomeProfissional,
+            'id' => $user->codProfissionalSaude,
+            'nome' => $user->nomeProfissionalSaude,
         ]);
 
         return redirect()->route('painel.dashboard');
@@ -146,57 +151,57 @@ class UserController extends Controller
         }
 
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:tbProfissional,emailProfissional,' . $profissional->id . ',id',
-            
-            'telefone' => 'required|string|max:15',
-            'dataNasc' => 'required|date',
-            'categoria' => 'required|string|max:17',
-            'especialidade' => 'required|string|max:255',
-            'conselho' => 'required|string|max:5',
-            'numConselho' => 'required|string|max:9',
-            'ufConselho' => 'required|string|max:2',
+            'nome' => 'required|string|max:120',
+            'email' => 'required|email|max:150|unique:tbprofissionalsaude,emailProfissionalSaude,' . $profissional->codProfissionalSaude . ',codProfissionalSaude',
+            'telefone' => 'nullable|string|max:14|unique:tbprofissionalsaude,telProfissionalSaude,' . $profissional->codProfissionalSaude . ',codProfissionalSaude',
+            'categoria' => 'required|string',
+            'especialidade' => 'nullable|string|max:25',
             'apresentacao' => 'nullable|string|max:400',
-
+            'pais' => 'nullable|string|max:60',
+            'cidade' => 'nullable|string|max:100',
+            'uf' => 'nullable|string|max:2',
+            'cep' => 'nullable|string|max:10',
             'fotoPerfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-
-            'atendeChat' => 'boolean',
-            'atendeDuvidaRapido' => 'boolean',
-            'atendePresencial' => 'boolean',
         ], [
             'nome.required' => 'Campo nome obrigatório.',
+            'nome.max' => 'O nome deve ter no máximo 120 caracteres.',
+
             'email.required' => 'Campo email obrigatório.',
             'email.email' => 'Informe um e-mail válido.',
-            
-            'telefone.required' => 'Campo telefone obrigatório.',
-            'dataNasc.required' => 'Campo data de nascimento obrigatório.',
+            'email.unique' => 'Esse email já foi cadastrado',
+            'email.max' => 'O e-mail deve ter no máximo 150 caracteres.',
+
+            'telefone.max' => 'O telefone deve ter no máximo 14 caracteres.',
+            'telefone.unique' => 'Esse telefone já está cadastrado',
+
             'categoria.required' => 'Campo categoria obrigatório.',
-            'especialidade.required' => 'Campo especialidade obrigatório.',
-            'conselho.required' => 'Campo conselho obrigatório.',
-            'numConselho.required' => 'Campo número do conselho obrigatório.',
-            'ufConselho.required' => 'Campo UF do conselho obrigatório.',
-            'fotoPerfil.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp.',
-            'fotoPerfil.max' => 'O arquivo deve ter no máximo 2 MB.',
+            'especialidade.max' => 'A especialidade deve ter no máximo 25 caracteres.',
+            'apresentacao.max' => 'A apresentação deve ter no máximo 400 caracteres.',
+
+            'pais.max' => 'O país deve ter no máximo 60 caracteres',
+            'cidade.max' => 'A cidade deve ter no máximo 100 caracteres',
+            'uf.max' => 'O UF deve ter no máximo 2 caracteres',
+            'cep.max' => 'O CEP deve ter no máximo 10 caracteres',
+
+            'fotoPerfil.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp',
+            'fotoPerfil.max' => 'O arquivo deve ter no máximo 2 MB',
         ]);
 
-        $profissional->nomeProfissional = $request->nome;
-        $profissional->emailProfissional = $request->email;
-        $profissional->telefoneProfissional = $request->telefone;
-        $profissional->dataNascProfissional = $request->dataNasc;
+        $profissional->nomeProfissionalSaude = $request->nome;
+        $profissional->emailProfissionalSaude = $request->email;
+        $profissional->telProfissionalSaude = $request->telefone;
         $profissional->categoriaProfissional = $request->categoria;
-        $profissional->especialidadeProfissional = $request->especialidade;
-        $profissional->conselhoClasseProfissional = $request->conselho;
-        $profissional->numConselhoProfissional = $request->numConselho;
-        $profissional->ufConselhoProfissional = $request->ufConselho;
+        $profissional->especialidadeProfissionalSaude = $request->especialidade;
         $profissional->apresentacaoProfissional = $request->apresentacao;
-
-        $profissional->atendeChatProfissional = $request->boolean('atendeChat');
-        $profissional->atendeDuvidaRapidoProfissional = $request->boolean('atendeDuvidaRapido');
-        $profissional->atendePresencialProfissional = $request->boolean('atendePresencial');
-
+        $profissional->paisProfissional = $request->pais;
+        $profissional->cidadeProfissional = $request->cidade;
+        $profissional->ufProfissional = $request->uf;
+        $profissional->cepProfissional = $request->cep;
         // Atualiza a foto somente se o usuário enviar uma nova
         if ($request->hasFile('fotoPerfil')) {
-            $profissional->fotoPerfilProfissional = $request->file('fotoPerfil');
+            $foto = $request->file('fotoPerfil')->store('fotos/perfil', 'public');
+
+            $profissional->fotoPerfilProfissional = $foto;
         }
 
         $profissional->save();
@@ -204,7 +209,6 @@ class UserController extends Controller
         return redirect('user.perfil-profissional')
             ->with('sucesso', 'Perfil atualizado com sucesso!');
         
-    
     }
 
 
@@ -216,20 +220,30 @@ class UserController extends Controller
     public function atualizarSenha(Request $request)
     {
         $request->validate([
-            'senhaAtual' => 'required',
+            'senhaAtual' => 'required|min:8',
             'novaSenha' => 'required|min:8',
-            'confirmarSenha' => 'required|same:novaSenha',
+            'confirmarSenha' => 'required|same:novaSenha|min:8',
+        ],[
+            'senhaAtual.required'=> 'Campo senha atual obrigatório.',
+            'senhaAtual.min' => 'A senha atual deve ter no mínimo 8 caracteres.',
+
+            'novaSenha.required'=> 'Campo nova senha obrigatório.',
+            'novaSenha.min' => 'A nova senha deve ter no mínimo 8 caracteres.',
+
+            'confirmarSenha.required'=> 'Campo confirmar senha obrigatório.',
+            'confirmarSenha.same'=> 'Os campos nova senha e confirmar senha devem ser iguais.',
+            'confirmarSenha.min' => 'A nova senha deve ter no mínimo 8 caracteres.',
         ]);
 
         $profissional = User::find(session('id'));
 
-        if (!Hash::check($request->senhaAtual, $profissional->senhaProfissional)) {
+        if (!Hash::check($request->senhaAtual, $profissional->senhaProfissionalSaude)) {
             return back()->withErrors([
                 'senhaAtual' => 'A senha atual está incorreta.'
             ]);
         }
 
-        $profissional->senhaProfissional = Hash::make($request->novaSenha);
+        $profissional->senhaProfissionalSaude = Hash::make($request->novaSenha);
         $profissional->save();
 
         return back()->with('sucesso', 'Senha alterada com sucesso!');
@@ -239,7 +253,7 @@ class UserController extends Controller
     {
         $profissional = User::find(session('id'));
 
-        $profissional->statusContaProfissional = 'desabilitada';
+        $profissional->statusConta = 'Excluída';
         $profissional->save();
 
         session()->forget('id');
@@ -253,6 +267,7 @@ class UserController extends Controller
         return view('painelProfissional.dashboard', compact('profissional'));
     }
 
+    //APIs
     public function indexApi()
     {
         $user = User::orderby('created_at', 'desc')->get();
