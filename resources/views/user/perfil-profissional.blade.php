@@ -153,6 +153,22 @@
                     </div>
                 </div>
 
+                @if ($errors->any())
+                    <div class="alert-error">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @if (session('erro'))
+                    <div class="alert-error">
+                        {{ session('erro') }}
+                    </div>
+                @endif
+
                 <div class="profile-grid">
 
                     {{-- ===================== DADOS DO PERFIL (SOMENTE LEITURA) ===================== --}}
@@ -178,14 +194,10 @@
                             </div>
                         </div>
 
-                        <div class="field-grid-2 field-view">
+                        <div class="field-view" style="margin-bottom: 20px;">
                             <div>
                                 <label>Email</label>
                                 <div class="field-display">{{ $profissional->emailProfissionalSaude }}</div>
-                            </div>
-                            <div>
-                                <label>CPF ou CNPJ</label>
-                                <div class="field-display">{{ $profissional->nrFiscalProfissional ?? '-' }}</div>
                             </div>
                         </div>
 
@@ -194,15 +206,21 @@
                                 <label>Telefone</label>
                                 <div class="field-display">{{ $profissional->telProfissionalSaude ?? '-' }}</div>
                             </div>
-                            <div class="field-grid-2 field-view">
-                                <div>
-                                    <label>CEP</label>
-                                    <div class="field-display">{{ $profissional->cepProfissional ?? '-' }}</div>
-                                </div>
-                                <div>
-                                    <label>UF</label>
-                                    <div class="field-display">{{ $profissional->ufProfissional ?? '-' }}</div>
-                                </div>
+
+                            <div>
+                                <label>CPF ou CNPJ</label>
+                                <div class="field-display">{{ $profissional->nrFiscalProfissional ?? '-' }}</div>
+                            </div>
+                        </div>
+
+                        <div class="field-grid-2 field-view">
+                            <div>
+                                <label>CEP</label>
+                                <div class="field-display">{{ $profissional->cepProfissional ?? '-' }}</div>
+                            </div>
+                            <div>
+                                <label>UF</label>
+                                <div class="field-display">{{ $profissional->ufProfissional ?? '-' }}</div>
                             </div>
                         </div>
 
