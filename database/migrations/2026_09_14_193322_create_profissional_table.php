@@ -11,31 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbProfissional', function (Blueprint $table) {
-            $table->id();
-            $table->string('nomeProfissional');
-            $table->string('emailProfissional');
-            $table->string('cpfProfissional');
-            $table->string('telefoneProfissional');
-            $table->date('dataNascProfissional');
-            $table->string('senhaProfissional');
-            $table->string('categoriaProfissional');
-            $table->string('especialidadeProfissional');
-            $table->string('conselhoClasseProfissional');
-            $table->string('numConselhoProfissional');
-            $table->string('ufConselhoProfissional');
-            $table->string('comprovanteConselhoProfissional');
-            $table->string('docComplementarProfissional');
-            $table->string('apresentacaoProfissional')->nullable();
-            $table->string('fotoPerfilProfissional')->nullable();
-            $table->boolean('atendeChatProfissional');
-            $table->boolean('atendeDuvidaRapidoProfissional');
-            $table->boolean('atendePresencialProfissional');
+        Schema::create('tbprofissionalsaude', function (Blueprint $table) {
+            $table->id('codProfissionalSaude');
+            $table->string('nomeProfissionalSaude', 120);
+            $table->string('emailProfissionalSaude', 150);
+            $table->string('telProfissionalSaude', 14);
+            $table->string('senhaProfissionalSaude', 255);
+            $table->boolean('duasEtapasAtiva')->default(false);
+            $table->enum('provedorLoginProfissional', ['Local', 'Google'])->default('Local');
+            $table->string('googleIdProfissional', 255);
+            $table->enum('categoriaProfissional', ['Médico', 'Enfermeiro','Psicologo', 'Assistente Social', 'Outro']);
+            $table->string('especialidadeProfissionalSaude', 25)->nullable();
+            $table->string('apresentacaoProfissional', 400)->nullable();
+            $table->string('paisProfissional', 60)->nullable();
+            $table->string('cidadeProfissional', 100)->nullable();
+            $table->string('ufProfissional0', 2)->nullable();
+            $table->string('cepProfissional', 10)->nullable();
+            $table->string('nrFiscalProfissional', 20)->nullable();
+            $table->string('fotoPerfilProfissional', 255)->nullable();
+            $table->enum('statusVerificacao', ['Em análise', 'Aprovado', 'Pendência'])->default('Em análise');
+            $table->enum('statusConta', ['Ativa', 'Suspensa', 'Excluída'])->default('Ativa');
             $table->string('statusVerificacaoProfissional')->nullable();
-            $table->string('statusContaProfissional')->nullable();
-            $table->timestamps();
-
-            
+            $table->timestamp('dataCadastro')->useCurrent();
+            $table->timestamp('dataAtualizacao')->useCurrent()->useCurrentOnUpdate();            
         });
     }
 
@@ -44,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tbProfissional');
+        Schema::dropIfExists('tbprofissionalsaude');
     }
 };
