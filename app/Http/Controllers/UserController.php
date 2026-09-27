@@ -29,7 +29,7 @@ class UserController extends Controller
             'cidade' => 'nullable|string|max:100',
             'uf' => 'nullable|string|max:2',
             'cep' => 'nullable|string|max:10',
-            'nrFiscal' => 'nullable|string|max:20|unique:tbprofissionalsaude,nrFiscalProfissional',
+            'nrFiscal' => 'nullable|string|max:20|min:11|unique:tbprofissionalsaude,nrFiscalProfissional',
             'fotoPerfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
             'nome.required' => 'Campo nome obrigatório.',
@@ -56,13 +56,23 @@ class UserController extends Controller
             'uf.max' => 'O UF deve ter no máximo 2 caracteres',
             'cep.max' => 'O CEP deve ter no máximo 10 caracteres',
 
-            'nrFiscal' => 'O CPF  ou CPNJ devem ter no máximo 20 caracteres',
+            'nrFiscal.max' => 'O CPF  ou CPNJ devem ter no máximo 20 caracteres',
+            'nrFiscal.min' => 'O CPF  ou CPNJ devem ter no mínimo 11 caracteres',
             'nrFiscal.unique' => 'Esse CPF ou CNPJ já foi cadastrado',
 
             'fotoPerfil.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp',
             'fotoPerfil.max' => 'O arquivo deve ter no máximo 2 MB',
-
         ]);
+
+        $documento = preg_replace('/\D/', '', $request->nrFiscal);
+
+        if (!$this->validarCpfCnpj($documento)) {
+            return back()
+                ->withErrors([
+                    'nrFiscal' => 'CPF ou CNPJ inválido.'
+                ])
+                ->withInput();
+        }
 
         User::create([
             'nomeProfissionalSaude' => $request->nome,
@@ -86,6 +96,113 @@ class UserController extends Controller
         ]);
 
         return redirect('/')->with('sucesso', 'Conta criada com sucesso!');
+    }
+
+    private function validarCpfCnpj($documento)
+    {
+        if (strlen($documento) === 11) {
+            return $this->validarCpf($documento);
+        }
+
+        if (strlen($documento) === 14) {
+            return $this->validarCnpj($documento);
+        }
+
+        return false;
+    }
+
+    private function validarCpf($cpf)
+    {
+        if (preg_match('/^(\d)\1{10}$/', $cpf)) {
+            return false;
+        }
+
+        $soma = 0;
+
+        for ($i = 0; $i < 9; $i++) {
+            $soma += $cpf[$i] * (10 - $i);
+        }
+
+        $resto = $soma % 11;
+
+        if ($resto < 2) {
+            $digito1 = 0;
+        } else {
+            $digito1 = 11 - $resto;
+        }
+
+        if ($cpf[9] != $digito1) {
+            return false;
+        }
+
+        $soma = 0;
+
+        for ($i = 0; $i < 10; $i++) {
+            $soma += $cpf[$i] * (11 - $i);
+        }
+
+        $resto = $soma % 11;
+
+        if ($resto < 2) {
+            $digito2 = 0;
+        } else {
+            $digito2 = 11 - $resto;
+        }
+
+        if ($cpf[10] != $digito2) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function validarCnpj($cnpj)
+    {
+        if (preg_match('/^(\d)\1{13}$/', $cnpj)) {
+            return false;
+        }
+
+        $pesos = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+        $soma = 0;
+
+        for ($i = 0; $i < 12; $i++) {
+            $soma += $cnpj[$i] * $pesos[$i];
+        }
+
+        $resto = $soma % 11;
+
+        if ($resto < 2) {
+            $digito1 = 0;
+        } else {
+            $digito1 = 11 - $resto;
+        }
+
+        if ($cnpj[12] != $digito1) {
+            return false;
+        }
+
+        $soma = 0;
+
+        $pesos = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+        for ($i = 0; $i < 13; $i++) {
+            $soma += $cnpj[$i] * $pesos[$i];
+        }
+
+        $resto = $soma % 11;
+
+        if ($resto < 2) {
+            $digito2 = 0;
+        } else {
+            $digito2 = 11 - $resto;
+        }
+
+        if ($cnpj[13] != $digito2) {
+            return false;
+        }
+
+        return true;
     }
 
     public function login(Request $request)
