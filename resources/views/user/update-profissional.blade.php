@@ -16,7 +16,7 @@
 <body>
 
     @php
-        $inicial = strtoupper(substr($profissional->nomeProfissional ?? 'P', 0, 1));
+        $inicial = strtoupper(substr($profissional->nomeProfissionalSaude ?? 'P', 0, 1));
     @endphp
 
     <div class="app-shell">
@@ -34,7 +34,7 @@
                 <div class="nav-group">
                     <p class="nav-group-label">Principal</p>
 
-                    <a href="{{ url('/painel') }}" class="nav-item">
+                    <a href="{{ url('/dashboard') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8" /><path d="M5 10v10h14V10" /></svg>
                         <span>Painel</span>
                     </a>
@@ -105,8 +105,8 @@
                 <div class="sidebar-user">
                     <span class="avatar-circle">{{ $inicial }}</span>
                     <div class="sidebar-user-info">
-                        <strong>{{ $profissional->nomeProfissional }}</strong>
-                        <span>{{ $profissional->especialidadeProfissional }}</span>
+                        <strong>{{ $profissional->nomeProfissionalSaude }}</strong>
+                        <span>{{ $profissional->especialidadeProfissionalSaude }}</span>
                     </div>
                 </div>
 
@@ -138,7 +138,7 @@
                     <div class="topbar-user">
                         <span class="avatar-circle">{{ $inicial }}</span>
                         <div class="topbar-user-info">
-                            <strong>{{ $profissional->nomeProfissional }}</strong>
+                            <strong>{{ $profissional->nomeProfissionalSaude }}</strong>
                         </div>
                     </div>
                 </div>
@@ -197,100 +197,108 @@
                             <div class="field-row-2">
                                 <div class="field">
                                     <label for="nome">Nome</label>
-                                    <input type="text" name="nome" id="nome" value="{{ $profissional->nomeProfissional }}">
+                                    <input type="text" name="nome" id="nome" value="{{ $profissional->nomeProfissionalSaude }}">
                                 </div>
                                 <div class="field">
                                     <label for="email">E-mail</label>
-                                    <input type="email" name="email" id="email" value="{{ $profissional->emailProfissional }}">
+                                    <input type="email" name="email" id="email" value="{{ $profissional->emailProfissionalSaude }}">
                                 </div>
                             </div>
 
-                            <div class="field-row-2">
-                                <div class="field">
-                                    <label for="telefone">Telefone</label>
-                                    <input type="text" name="telefone" id="telefone" value="{{ $profissional->telefoneProfissional }}">
-                                </div>
-                                <div class="field">
-                                    <label for="cpf">CPF</label>
-                                    <input type="text" name="cpf" id="cpf" value="{{ $profissional->cpfProfissional }}">
-                                </div>
+                            <div class="field">
+                                <label for="telefone">Telefone</label>
+                                <input type="text" name="telefone" id="telefone" value="{{ $profissional->telProfissionalSaude }}">
                             </div>
 
                             <div class="field-row-2">
-                                <div class="field">
-                                    <label for="dataNasc">Data de Nascimento</label>
-                                    <input type="date" name="dataNasc" id="dataNasc" value="{{ $profissional->dataNascProfissional }}">
-                                </div>
                                 <div class="field">
                                     <label for="categoria">Categoria</label>
+
                                     <select name="categoria" id="categoria">
                                         <option value="">Selecione</option>
-                                        <option value="medico" {{ $profissional->categoriaProfissional == 'medico' ? 'selected' : '' }}>Médica</option>
-                                        <option value="enfermeiro" {{ $profissional->categoriaProfissional == 'enfermeiro' ? 'selected' : '' }}>Enfermeira</option>
-                                        <option value="psicologo" {{ $profissional->categoriaProfissional == 'psicologo' ? 'selected' : '' }}>Psicóloga</option>
-                                        <option value="outro" {{ $profissional->categoriaProfissional == 'outro' ? 'selected' : '' }}>Outro</option>
+
+                                        <option value="Médico"
+                                            {{ $profissional->categoriaProfissional == 'Médico' ? 'selected' : '' }}>
+                                            Médica
+                                        </option>
+
+                                        <option value="Enfermeiro"
+                                            {{ $profissional->categoriaProfissional == 'Enfermeiro' ? 'selected' : '' }}>
+                                            Enfermeira
+                                        </option>
+
+                                        <option value="Psicologo"
+                                            {{ $profissional->categoriaProfissional == 'Psicologo' ? 'selected' : '' }}>
+                                            Psicóloga
+                                        </option>
+
+                                        <option value="Assistente Social"
+                                            {{ $profissional->categoriaProfissional == 'Assistente Social' ? 'selected' : '' }}>
+                                            Assistente Social
+                                        </option>
+
+                                        <option value="Outro"
+                                            {{ $profissional->categoriaProfissional == 'Outro' ? 'selected' : '' }}>
+                                            Outro
+                                        </option>
                                     </select>
                                 </div>
-                            </div>
-
-                            <div class="field-row-2">
                                 <div class="field">
                                     <label for="especialidade">Especialidade</label>
-                                    <input type="text" name="especialidade" id="especialidade" value="{{ $profissional->especialidadeProfissional }}">
+                                    <input type="text" name="especialidade" id="especialidade" value="{{ $profissional->especialidadeProfissionalSaude }}">
+                                </div>
+                            </div>
+
+                            <div class="field-row-2">
+                                <div class="field">
+                                    <label for="cep">CEP</label>
+                                    <input type="text" name="cep" id="cep" value="{{ $profissional->cepProfissional }}">
                                 </div>
                                 <div class="field">
-                                    <label for="conselho">Conselho de Classe</label>
-                                    <select name="conselho" id="conselho">
-                                        @if($profissional->conselhoClasseProfissional)
-                                            <option value="{{ $profissional->conselhoClasseProfissional }}" selected>{{ $profissional->conselhoClasseProfissional }}</option>
-                                        @else
-                                            <option value="" selected>Selecione</option>
-                                        @endif
-                                        <option value="CRM">CRM</option>
-                                        <option value="CRP">CRP</option>
-                                        <option value="COREN">COREN</option>
-                                        <option value="CRESS">CRESS</option>
+                                    <label for="uf">UF</label>
+
+                                    <select name="uf" id="uf">
+                                        <option value="">Selecione a UF</option>
+
+                                        <option value="AC" {{ $profissional->ufProfissional == 'AC' ? 'selected' : '' }}>Acre</option>
+                                        <option value="AL" {{ $profissional->ufProfissional == 'AL' ? 'selected' : '' }}>Alagoas</option>
+                                        <option value="AP" {{ $profissional->ufProfissional == 'AP' ? 'selected' : '' }}>Amapá</option>
+                                        <option value="AM" {{ $profissional->ufProfissional == 'AM' ? 'selected' : '' }}>Amazonas</option>
+                                        <option value="BA" {{ $profissional->ufProfissional == 'BA' ? 'selected' : '' }}>Bahia</option>
+                                        <option value="CE" {{ $profissional->ufProfissional == 'CE' ? 'selected' : '' }}>Ceará</option>
+                                        <option value="DF" {{ $profissional->ufProfissional == 'DF' ? 'selected' : '' }}>Distrito Federal</option>
+                                        <option value="ES" {{ $profissional->ufProfissional == 'ES' ? 'selected' : '' }}>Espírito Santo</option>
+                                        <option value="GO" {{ $profissional->ufProfissional == 'GO' ? 'selected' : '' }}>Goiás</option>
+                                        <option value="MA" {{ $profissional->ufProfissional == 'MA' ? 'selected' : '' }}>Maranhão</option>
+                                        <option value="MT" {{ $profissional->ufProfissional == 'MT' ? 'selected' : '' }}>Mato Grosso</option>
+                                        <option value="MS" {{ $profissional->ufProfissional == 'MS' ? 'selected' : '' }}>Mato Grosso do Sul</option>
+                                        <option value="MG" {{ $profissional->ufProfissional == 'MG' ? 'selected' : '' }}>Minas Gerais</option>
+                                        <option value="PA" {{ $profissional->ufProfissional == 'PA' ? 'selected' : '' }}>Pará</option>
+                                        <option value="PB" {{ $profissional->ufProfissional == 'PB' ? 'selected' : '' }}>Paraíba</option>
+                                        <option value="PR" {{ $profissional->ufProfissional == 'PR' ? 'selected' : '' }}>Paraná</option>
+                                        <option value="PE" {{ $profissional->ufProfissional == 'PE' ? 'selected' : '' }}>Pernambuco</option>
+                                        <option value="PI" {{ $profissional->ufProfissional == 'PI' ? 'selected' : '' }}>Piauí</option>
+                                        <option value="RJ" {{ $profissional->ufProfissional == 'RJ' ? 'selected' : '' }}>Rio de Janeiro</option>
+                                        <option value="RN" {{ $profissional->ufProfissional == 'RN' ? 'selected' : '' }}>Rio Grande do Norte</option>
+                                        <option value="RS" {{ $profissional->ufProfissional == 'RS' ? 'selected' : '' }}>Rio Grande do Sul</option>
+                                        <option value="RO" {{ $profissional->ufProfissional == 'RO' ? 'selected' : '' }}>Rondônia</option>
+                                        <option value="RR" {{ $profissional->ufProfissional == 'RR' ? 'selected' : '' }}>Roraima</option>
+                                        <option value="SC" {{ $profissional->ufProfissional == 'SC' ? 'selected' : '' }}>Santa Catarina</option>
+                                        <option value="SP" {{ $profissional->ufProfissional == 'SP' ? 'selected' : '' }}>São Paulo</option>
+                                        <option value="SE" {{ $profissional->ufProfissional == 'SE' ? 'selected' : '' }}>Sergipe</option>
+                                        <option value="TO" {{ $profissional->ufProfissional == 'TO' ? 'selected' : '' }}>Tocantins</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="field-row-2">
                                 <div class="field">
-                                    <label for="numConselho">Número do conselho</label>
-                                    <input type="text" name="numConselho" id="numConselho" value="{{ $profissional->numConselhoProfissional }}">
+                                    <label for="pais">País</label>
+                                    <input type="text" name="pais" id="pais" value="{{ $profissional->paisProfissional }}">
                                 </div>
                                 <div class="field">
-                                    <label for="ufConselho">UF do Conselho</label>
-                                    <select name="ufConselho" id="ufConselho">
-                                        <option value="">Selecione a UF</option>
-                                        <option value="AC" {{ $profissional->ufConselhoProfissional == 'AC' ? 'selected' : '' }}>Acre</option>
-                                        <option value="AL" {{ $profissional->ufConselhoProfissional == 'AL' ? 'selected' : '' }}>Alagoas</option>
-                                        <option value="AP" {{ $profissional->ufConselhoProfissional == 'AP' ? 'selected' : '' }}>Amapá</option>
-                                        <option value="AM" {{ $profissional->ufConselhoProfissional == 'AM' ? 'selected' : '' }}>Amazonas</option>
-                                        <option value="BA" {{ $profissional->ufConselhoProfissional == 'BA' ? 'selected' : '' }}>Bahia</option>
-                                        <option value="CE" {{ $profissional->ufConselhoProfissional == 'CE' ? 'selected' : '' }}>Ceará</option>
-                                        <option value="DF" {{ $profissional->ufConselhoProfissional == 'DF' ? 'selected' : '' }}>Distrito Federal</option>
-                                        <option value="ES" {{ $profissional->ufConselhoProfissional == 'ES' ? 'selected' : '' }}>Espírito Santo</option>
-                                        <option value="GO" {{ $profissional->ufConselhoProfissional == 'GO' ? 'selected' : '' }}>Goiás</option>
-                                        <option value="MA" {{ $profissional->ufConselhoProfissional == 'MA' ? 'selected' : '' }}>Maranhão</option>
-                                        <option value="MT" {{ $profissional->ufConselhoProfissional == 'MT' ? 'selected' : '' }}>Mato Grosso</option>
-                                        <option value="MS" {{ $profissional->ufConselhoProfissional == 'MS' ? 'selected' : '' }}>Mato Grosso do Sul</option>
-                                        <option value="MG" {{ $profissional->ufConselhoProfissional == 'MG' ? 'selected' : '' }}>Minas Gerais</option>
-                                        <option value="PA" {{ $profissional->ufConselhoProfissional == 'PA' ? 'selected' : '' }}>Pará</option>
-                                        <option value="PB" {{ $profissional->ufConselhoProfissional == 'PB' ? 'selected' : '' }}>Paraíba</option>
-                                        <option value="PR" {{ $profissional->ufConselhoProfissional == 'PR' ? 'selected' : '' }}>Paraná</option>
-                                        <option value="PE" {{ $profissional->ufConselhoProfissional == 'PE' ? 'selected' : '' }}>Pernambuco</option>
-                                        <option value="PI" {{ $profissional->ufConselhoProfissional == 'PI' ? 'selected' : '' }}>Piauí</option>
-                                        <option value="RJ" {{ $profissional->ufConselhoProfissional == 'RJ' ? 'selected' : '' }}>Rio de Janeiro</option>
-                                        <option value="RN" {{ $profissional->ufConselhoProfissional == 'RN' ? 'selected' : '' }}>Rio Grande do Norte</option>
-                                        <option value="RS" {{ $profissional->ufConselhoProfissional == 'RS' ? 'selected' : '' }}>Rio Grande do Sul</option>
-                                        <option value="RO" {{ $profissional->ufConselhoProfissional == 'RO' ? 'selected' : '' }}>Rondônia</option>
-                                        <option value="RR" {{ $profissional->ufConselhoProfissional == 'RR' ? 'selected' : '' }}>Roraima</option>
-                                        <option value="SC" {{ $profissional->ufConselhoProfissional == 'SC' ? 'selected' : '' }}>Santa Catarina</option>
-                                        <option value="SP" {{ $profissional->ufConselhoProfissional == 'SP' ? 'selected' : '' }}>São Paulo</option>
-                                        <option value="SE" {{ $profissional->ufConselhoProfissional == 'SE' ? 'selected' : '' }}>Sergipe</option>
-                                        <option value="TO" {{ $profissional->ufConselhoProfissional == 'TO' ? 'selected' : '' }}>Tocantins</option>
-                                    </select>
+                                    <label for="cidade">Cidade</label>
+                                    <input type="text" name="cidade" id="cidade" value="{{ $profissional->cidadeProfissional }}">
                                 </div>
                             </div>
 
@@ -298,63 +306,6 @@
                                 <label for="apresentacao">Apresentação</label>
                                 <textarea name="apresentacao" id="apresentacao" rows="4">{{ $profissional->apresentacaoProfissional }}</textarea>
                             </div>
-
-                            <div class="toggle-row" style="margin-bottom: 20px;">
-                                <div class="toggle-item">
-                                    <div class="toggle-item-text">
-                                        <strong>Atende Chat?</strong>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" name="atendeChat" id="atendeChat" value="1" {{ $profissional->atendeChatProfissional ? 'checked' : '' }}>
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-
-                                <div class="toggle-item">
-                                    <div class="toggle-item-text">
-                                        <strong>Atende Dúvida Rápida?</strong>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" name="atendeDuvidaRapido" id="atendeDuvidaRapido" value="1" {{ $profissional->atendeDuvidaRapidoProfissional ? 'checked' : '' }}>
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-
-                                <div class="toggle-item">
-                                    <div class="toggle-item-text">
-                                        <strong>Atende Presencial?</strong>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" name="atendePresencial" id="atendePresencial" value="1" {{ $profissional->atendePresencialProfissional ? 'checked' : '' }}>
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="field">
-                                <label class="upload-box" for="comprovanteConselho">
-                                    <span class="upload-icon">&#8593;</span>
-                                    <span class="upload-text">
-                                        <strong>Comprovante do conselho de classe</strong>
-                                        <span class="upload-desc">PDF, JPG ou PNG</span>
-                                    </span>
-                                    <span class="upload-filename" data-filename-for="comprovanteConselho">Nenhum arquivo escolhido</span>
-                                </label>
-                                <input type="file" name="comprovanteConselho" id="comprovanteConselho" class="upload-input" valeu="{{ $profissional->comprovanteConselhoProfissional }}">
-                            </div>
-
-                            <div class="field">
-                                <label class="upload-box" for="docComplementar">
-                                    <span class="upload-icon">&#8593;</span>
-                                    <span class="upload-text">
-                                        <strong>Documento de Identidade</strong>
-                                        <span class="upload-desc">PDF, JPG ou PNG</span>
-                                    </span>
-                                    <span class="upload-filename" data-filename-for="docComplementar">Nenhum arquivo escolhido</span>
-                                </label>
-                                <input type="file" name="docComplementar" id="docComplementar" class="upload-input" valeu="{{ $profissional->docComplementarProfissional }}">
-                            </div>
-
                         </div>
 
                         {{-- ===================== PRÉVIA DO PERFIL (ATUALIZA AO DIGITAR) ===================== --}}
@@ -399,6 +350,30 @@
     </div>
 
     <script>
+        document.getElementById('cep').addEventListener('blur', function () {
+
+        let cep = this.value.replace(/\D/g, '');
+
+        if (cep.length !== 8) {
+            return;
+        }
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.erro) {
+                    alert('CEP não encontrado.');
+                    return;
+                }
+
+                document.getElementById('pais').value = 'Brasil';
+                document.getElementById('cidade').value = data.localidade;
+                document.getElementById('uf').value = data.uf;
+
+            });
+        });
+
         // Nome do arquivo escolhido nas caixas de upload
         document.querySelectorAll('.upload-input').forEach(function (input) {
             input.addEventListener('change', function () {
