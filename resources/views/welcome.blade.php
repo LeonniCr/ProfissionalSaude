@@ -24,7 +24,7 @@
                 <img src="{{ asset('images/logoVenus.png') }}" alt="Vênus - A saúde da Mulher na palma da sua mão" class="logo">
             </div>
 
-            <div class="info-card" style="background-image: url('{{ asset('images/RetanguloLogin.png') }}');">
+            <div class="info-card">
                 <span class="info-badge">CRM &middot; CRP &middot; COREN &middot; CRESS</span>
                 <h2>Conectando profissionais à saúde da mulher</h2>
                 <p>Atendimento com sigilo, acolhimento e responsabilidade.</p>
@@ -54,13 +54,13 @@
                     @csrf
 
                     <div class="field">
-                        <label for="emailProfissional">E-mail ou n&deg; de conselho</label>
+                        <label for="emailProfissional">E-mail</label>
                         <input
                             type="text"
-                            name="login"
-                            id="loginProfissional"
-                            placeholder="seu@Email.com ou CRM 123456"
-                            value="{{ old('login') }}"
+                            name="senha"
+                            id="emailProfissional"
+                            placeholder="seu@Email.com"
+                            value="{{ old('email') }}"
                             required
                             autofocus
                         >
