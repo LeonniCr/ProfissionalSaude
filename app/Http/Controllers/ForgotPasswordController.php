@@ -17,11 +17,15 @@ class ForgotPasswordController extends Controller
 
     public function enviar(Request $request){
         $request->validate([
-            'emailProfissional' => 'required|email',
+            'emailProfissional' => 'required|email|max:150',
+        ],[
+            'email.required' => 'Campo email obrigatório.',
+            'email.email' => 'Informe um e-mail válido.',
+            'email.max' => 'O e-mail deve ter no máximo 150 caracteres.',
         ]);
 
         $profissional = User::where(
-            'emailProfissional',
+            'emailProfissionalSaude',
             $request->emailProfissional
         )->first();
 
@@ -38,7 +42,7 @@ class ForgotPasswordController extends Controller
             'chave' => $chave,
         ]);
 
-        Mail::to($profissional->emailProfissional)
+        Mail::to($profissional->emailProfissionalSaude)
         ->send(new RecuperacaoSenhaMail($chave));
 
         return back()->with('sucesso', 'Chave de recuperação criada!');
@@ -65,6 +69,9 @@ class ForgotPasswordController extends Controller
     public function atualizarSenha(Request $request, $chave){
         $request->validate([
         'senhaProfissional' => 'required|string|min:8|confirmed',
+        ],[
+            'senha.required' => 'Campo senha obrigatório.',
+            'senha.min' => 'A senha deve ter no mínimo 8 caracteres',
         ]);
 
         $recuperacao = RecuperacaoSenha::where('chave', $chave)->first();
@@ -74,7 +81,7 @@ class ForgotPasswordController extends Controller
         }
 
         $profissional = User::where(
-            'emailProfissional',
+            'emailProfissionalSaude',
             $recuperacao->emailProfissional
         )->first();
 
@@ -82,7 +89,7 @@ class ForgotPasswordController extends Controller
             return 'Profissional não encontrado.';
         }
 
-        $profissional->senhaProfissional = Hash::make($request->senhaProfissional);
+        $profissional->senhaProfissionalSaude = Hash::make($request->senhaProfissional);
         $profissional->save();
 
         $recuperacao->delete();
