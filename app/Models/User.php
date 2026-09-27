@@ -13,6 +13,9 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
     protected $table = 'tbprofissionalsaude';
+    
+    protected $primaryKey = 'codProfissionalSaude';
+    
     const CREATED_AT = 'dataCadastro';
     const UPDATED_AT = 'dataAtualizacao';
 
@@ -60,7 +63,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'duasEtapasAtiva' => 'boolean',
         ];
     }
 }
