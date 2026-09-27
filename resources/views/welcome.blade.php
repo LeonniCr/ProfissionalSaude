@@ -56,7 +56,7 @@
                     </div>
                 @endif
 
-                <form action="/login" method="post" class="login-form">
+                <form action="/login" method="post" class="login-form" id="formLogin">
                     @csrf
 
                     <div class="field">
@@ -74,13 +74,17 @@
 
                     <div class="field">
                         <label for="senhaProfissional">Senha</label>
-                        <input
-                            type="password"
-                            name="senha"
-                            id="senhaProfissional"
-                            placeholder="Digite sua senha"
-                            required
-                        >
+
+                        <div class="input-password">
+                            <input
+                                type="password"
+                                name="senha"
+                                id="senhaProfissional"
+                                placeholder="Digite sua senha"
+                                required
+                            >
+                            <button type="button" class="toggle-password" data-target="senhaProfissional" aria-label="Mostrar senha">&#128065;</button>
+                        </div>
                     </div>
 
                     <div class="field-row">
@@ -118,6 +122,17 @@
         </div>
 
     </section>
+
+    <script>
+        var form = document.getElementById('formLogin');
+
+        form.querySelectorAll('.toggle-password').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var input = document.getElementById(btn.dataset.target);
+                input.type = input.type === 'password' ? 'text' : 'password';
+            });
+        });
+    </script>
 
 </body>
 </html>
