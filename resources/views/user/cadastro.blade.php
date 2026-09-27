@@ -98,19 +98,13 @@
                             </div>
                             <div class="field">
                                 <label for="telefone">Celular (com DDD)</label>
-                                <input type="text" name="telefone" id="telefone" placeholder="(11) 99999-9999" required>
+                                <input type="text" name="telefone" id="telefone" placeholder="(11) 99999-9999">
                             </div>
                         </div>
 
-                        <div class="field-row-2">
-                            <div class="field">
-                                <label for="cpf">CPF</label>
-                                <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" required>
-                            </div>
-                            <div class="field">
-                                <label for="dataNasc">Data de nascimento</label>
-                                <input type="date" name="dataNasc" id="dataNasc" required>
-                            </div>
+                        <div class="field">
+                            <label for="cpf">CPF ou CNPJ</label>
+                            <input type="text" name="nrFiscal" id="cpf" placeholder="000.000.000-00 ou 00.000.000/0000-00" required>
                         </div>
 
                         <div class="field-row-2 field-row-senha">
@@ -133,7 +127,7 @@
 
                         <div class="field">
                             <label for="apresentacao">Apresentação</label>
-                            <textarea name="apresentacao" id="apresentacao" rows="3" placeholder="Conte brevemente sua experiência e abordagem de atendimento." required></textarea>
+                            <textarea name="apresentacao" id="apresentacao" rows="3" placeholder="Conte brevemente sua experiência e abordagem de atendimento."></textarea>
                         </div>
 
                         <div class="field">
@@ -145,7 +139,7 @@
                                 </span>
                                 <span class="upload-filename" data-filename-for="fotoPerfil">Nenhum arquivo selecionado</span>
                             </label>
-                            <input type="file" name="fotoPerfil" id="fotoPerfil" accept="image/*" class="upload-input" required>
+                            <input type="file" name="fotoPerfil" id="fotoPerfil" accept="image/*" class="upload-input">
                         </div>
 
                         <label class="checkbox terms-checkbox">
@@ -171,38 +165,37 @@
                                 <label for="categoria">Categoria profissional</label>
                                 <select name="categoria" id="categoria" required>
                                     <option value="">Selecione</option>
-                                    <option value="medico">Médica</option>
-                                    <option value="enfermeiro">Enfermeira</option>
-                                    <option value="psicologo">Psicóloga</option>
-                                    <option value="outro">Outro</option>
+                                    <option value="Médica">Médica</option>
+                                    <option value="Enfermeira">Enfermeira</option>
+                                    <option value="Psicologo">Psicóloga</option>
+                                    <option value="Outro">Outro</option>
                                 </select>
                             </div>
                             <div class="field">
                                 <label for="especialidade">Especialidade</label>
-                                <input type="text" name="especialidade" id="especialidade" placeholder="Ex: Ginecologista" required>
+                                <input type="text" name="especialidade" id="especialidade" placeholder="Ex: Ginecologista">
                             </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label for="cep">CEP</label>
+                            <input type="text" name="cep" id="cep" placeholder="Ex: 01001-000">
                         </div>
 
                         <div class="field-row-2">
                             <div class="field">
-                                <label for="conselho">Conselho de classe</label>
-                                <select name="conselho" id="conselho" required>
-                                    <option value="">Selecione</option>
-                                    <option value="CRM">CRM</option>
-                                    <option value="CRP">CRP</option>
-                                    <option value="COREN">COREN</option>
-                                    <option value="CRESS">CRESS</option>
-                                </select>
+                                <label for="pais">País</label>
+                                <input type="text" name="pais" id="pais" placeholder="Ex: Brasil">
                             </div>
                             <div class="field">
-                                <label for="numConselho">Número do conselho</label>
-                                <input type="text" name="numConselho" id="numConselho" placeholder="Ex: 123456" required>
+                                <label for="cidade">Cidade</label>
+                                <input type="text" name="cidade" id="cidade" placeholder="Ex: São Paulo">
                             </div>
                         </div>
 
                         <div class="field">
-                            <label for="ufConselho">UF do conselho</label>
-                            <select name="ufConselho" id="ufConselho" required>
+                            <label for="uf">UF</label>
+                            <select name="uf" id="uf">
                                 <option value="">Selecione a UF</option>
                                 <option value="AC">Acre</option>
                                 <option value="AL">Alagoas</option>
@@ -234,26 +227,6 @@
                             </select>
                         </div>
 
-                        <div class="field">
-                            <label>Tipo de atendimentos oferecidos</label>
-                            <p class="field-hint field-hint--top">Selecione pelo menos uma opção.</p>
-
-                            <div class="attend-options">
-                                <label class="attend-pill">
-                                    <input type="checkbox" name="atendeChat" id="atendeChat" value="1">
-                                    <span>Chat</span>
-                                </label>
-                                <label class="attend-pill">
-                                    <input type="checkbox" name="atendeDuvidaRapido" id="atendeDuvidaRapido" value="1">
-                                    <span>Dúvida rápida</span>
-                                </label>
-                                <label class="attend-pill">
-                                    <input type="checkbox" name="atendePresencial" id="atendePresencial" value="1">
-                                    <span>Presencial em parceria</span>
-                                </label>
-                            </div>
-                        </div>
-
                         <div class="wizard-actions">
                             <button type="button" class="btn-outline btn-prev" data-prev="1">Voltar</button>
                             <button type="button" class="btn-primary btn-next" data-next="3">Continuar</button>
@@ -264,7 +237,7 @@
                     {{-- ===================== PASSO 3 - DOCUMENTOS ===================== --}}
                     <div class="form-step" data-step="3">
 
-                        <span class="step-count">3 DE 4</span>
+                        <!-- <span class="step-count">3 DE 4</span>
                         <h2 class="step-title">Documento para verificação</h2>
                         <p class="step-subtitle">Envie os documentos solicitados para validar seu cadastro profissional.</p>
 
@@ -290,7 +263,7 @@
 
                         <div class="info-note">
                             Os documentos serão usados exclusivamente para análise e verificação do cadastro profissional.
-                        </div>
+                        </div> -->
 
                         <div class="wizard-actions">
                             <button type="button" class="btn-outline btn-prev" data-prev="2">Voltar</button>
@@ -327,14 +300,14 @@
                                 <span class="review-label">Especialidade</span>
                                 <span class="review-value" data-review="especialidade">—</span>
                             </div>
-                            <div class="review-item">
+                            <!-- <div class="review-item">
                                 <span class="review-label">Conselho</span>
                                 <span class="review-value" data-review="conselho">—</span>
                             </div>
                             <div class="review-item">
                                 <span class="review-label">Atendimentos</span>
                                 <span class="review-value" data-review="atendimentos">—</span>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="info-note">
@@ -362,6 +335,30 @@
     </section>
 
     <script>
+        document.getElementById('cep').addEventListener('blur', function () {
+
+        let cep = this.value.replace(/\D/g, '');
+
+        if (cep.length !== 8) {
+            return;
+        }
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.erro) {
+                    alert('CEP não encontrado.');
+                    return;
+                }
+
+                document.getElementById('pais').value = 'Brasil';
+                document.getElementById('cidade').value = data.localidade;
+                document.getElementById('uf').value = data.uf;
+
+            });
+        });
+
         (function () {
             var form = document.getElementById('formCadastro');
             var steps = Array.prototype.slice.call(form.querySelectorAll('.form-step'));
@@ -437,7 +434,7 @@
 
                     setReview('especialidade', get('especialidade').value);
 
-                    var conselhoSelect = get('conselho');
+                    /*var conselhoSelect = get('conselho');
                     var ufSelect = get('ufConselho');
                     var conselhoTexto = conselhoSelect.value ? conselhoSelect.value + ' - ' + get('numConselho').value + '/' + ufSelect.value : '';
                     setReview('conselho', conselhoTexto);
@@ -446,7 +443,7 @@
                     if (get('atendeChat').checked) atendimentos.push('Chat');
                     if (get('atendeDuvidaRapido').checked) atendimentos.push('Dúvida rápida');
                     if (get('atendePresencial').checked) atendimentos.push('Presencial em parceria');
-                    setReview('atendimentos', atendimentos.join(', '));
+                    setReview('atendimentos', atendimentos.join(', '));*/
                 });
             });
         })();
