@@ -17,7 +17,7 @@ class ForgotPasswordController extends Controller
 
     public function enviar(Request $request){
         $request->validate([
-            'emailProfissional' => 'required|email|max:150',
+            'emailProfissionalSaude' => 'required|email|max:150',
         ],[
             'email.required' => 'Campo email obrigatório.',
             'email.email' => 'Informe um e-mail válido.',
@@ -26,19 +26,19 @@ class ForgotPasswordController extends Controller
 
         $profissional = User::where(
             'emailProfissionalSaude',
-            $request->emailProfissional
+            $request->emailProfissionalSaude
         )->first();
 
         if (!$profissional) {
             return back()->withErrors([
-                'emailProfissional' => 'E-mail não encontrado.'
+                'emailProfissionalSaude' => 'E-mail não encontrado.'
             ])->withInput();
         }
 
         $chave = Str::random(64);
 
         RecuperacaoSenha::create([
-            'emailProfissional' => $request->emailProfissional,
+            'emailProfissionalSaude' => $request->emailProfissionalSaude,
             'chave' => $chave,
         ]);
 
@@ -70,23 +70,29 @@ class ForgotPasswordController extends Controller
         $request->validate([
         'senhaProfissional' => 'required|string|min:8|confirmed',
         ],[
-            'senha.required' => 'Campo senha obrigatório.',
-            'senha.min' => 'A senha deve ter no mínimo 8 caracteres',
+            'senhaProfissional.required' => 'Campo senha obrigatório.',
+            'senhaProfissional.string' => 'A senha deve ser um texto.',
+            'senhaProfissional.min' => 'A senha deve ter no mínimo 8 caracteres.',
+            'senhaProfissional.confirmed' => 'As senhas não coincidem.',
         ]);
 
         $recuperacao = RecuperacaoSenha::where('chave', $chave)->first();
 
         if (!$recuperacao) {
-            return 'Chave de recuperação inválida.';
+            return back()->withErrors([
+                'senhaAtual' => 'Chave de recuperação inválida.'
+            ]);
         }
 
         $profissional = User::where(
             'emailProfissionalSaude',
-            $recuperacao->emailProfissional
+            $recuperacao->emailProfissionalSaude
         )->first();
 
         if (!$profissional) {
-            return 'Profissional não encontrado.';
+            return back()->withErrors([
+                'senhaAtual' => 'Profissional não encontrado.'
+            ]);
         }
 
         $profissional->senhaProfissionalSaude = Hash::make($request->senhaProfissional);
@@ -94,6 +100,6 @@ class ForgotPasswordController extends Controller
 
         $recuperacao->delete();
 
-        return 'Senha alterada com sucesso!';
+        return redirect('/')->with('sucesso', 'Senha alterada com sucesso!');
     }
 }
