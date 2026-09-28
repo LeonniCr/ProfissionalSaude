@@ -31,6 +31,8 @@ class UserController extends Controller
             'cep' => 'nullable|string|max:10',
             'nrFiscal' => 'nullable|string|max:20|min:11|unique:tbprofissionalsaude,nrFiscalProfissional',
             'fotoPerfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'comprovanteConselho' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'docComplementar' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ], [
             'nome.required' => 'Campo nome obrigatório.',
             'nome.max' => 'O nome deve ter no máximo 120 caracteres.',
@@ -62,6 +64,13 @@ class UserController extends Controller
 
             'fotoPerfil.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp',
             'fotoPerfil.max' => 'O arquivo deve ter no máximo 2 MB',
+
+            'comprovanteConselho.mimes' => 'O arquivo deve ser pdf, jpg, jpeg, png',
+            'docComplementar.max' => 'O arquivo deve ter no máximo 2 MB',
+            
+            'documentoComplementar.mimes' => 'O arquivo deve ser pdf, jpg, jpeg, png',
+            'documentoComplementar.max' => 'O arquivo deve ter no máximo 2 MB',
+
         ]);
 
         $documento = preg_replace('/\D/', '', $request->nrFiscal);
@@ -93,6 +102,8 @@ class UserController extends Controller
             'fotoPerfilProfissional' => $request->fotoPerfil,
             'statusVerificacao' => 'Em análise',
             'statusConta' => 'Ativa',
+            'comprovanteConselhoClasseProfissional' => $request->comprovanteConselho,
+            'documentoComplementarProfissional' => $request->docComplementar,
         ]);
 
         return redirect('/')->with('sucesso', 'Conta criada com sucesso!');
@@ -279,6 +290,8 @@ class UserController extends Controller
             'uf' => 'nullable|string|max:2',
             'cep' => 'nullable|string|max:10',
             'fotoPerfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'comprovanteConselho' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'docComplementar' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ], [
             'nome.required' => 'Campo nome obrigatório.',
             'nome.max' => 'O nome deve ter no máximo 120 caracteres.',
@@ -302,6 +315,12 @@ class UserController extends Controller
 
             'fotoPerfil.mimes' => 'O arquivo deve ser jpg, jpeg, png ou webp',
             'fotoPerfil.max' => 'O arquivo deve ter no máximo 2 MB',
+
+            'comprovanteConselho.mimes' => 'O arquivo deve ser pdf, jpg, jpeg, png',
+            'comprovanteConselho.max' => 'O arquivo deve ter no máximo 2 MB',
+            
+            'docComplementar.mimes' => 'O arquivo deve ser pdf, jpg, jpeg, png',
+            'docComplementar.max' => 'O arquivo deve ter no máximo 2 MB',
         ]);
 
         $profissional->nomeProfissionalSaude = $request->nome;
@@ -314,6 +333,8 @@ class UserController extends Controller
         $profissional->cidadeProfissional = $request->cidade;
         $profissional->ufProfissional = $request->uf;
         $profissional->cepProfissional = $request->cep;
+        $profissional->comprovanteConselhoClasseProfissional = $request->comprovanteConselho;
+        $profissional->documentoComplementarProfissional = $request->docComplementar;
         // Atualiza a foto somente se o usuário enviar uma nova
         if ($request->hasFile('fotoPerfil')) {
             $foto = $request->file('fotoPerfil')->store('fotos/perfil', 'public');
