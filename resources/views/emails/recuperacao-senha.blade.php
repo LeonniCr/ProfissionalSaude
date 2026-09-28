@@ -4,91 +4,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar senha | Vênus</title>
+
+    <title>Recuperação de senha | Vênus</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdf4f6;
+            font-family: 'Poppins', Arial, sans-serif;
+            color: #4a3037;
+        }
+
+        .email-container {
+            width: 100%;
+            padding: 40px 20px;
+        }
+
+        .email-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(158, 24, 43, 0.10);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f9cbd6, #f2a9bc);
+            padding: 35px 30px;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #9e182b;
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 40px 35px;
+            text-align: center;
+        }
+
+        .content h2 {
+            margin: 0 0 15px;
+            color: #4a3037;
+            font-size: 21px;
+            font-weight: 600;
+        }
+
+        .content p {
+            margin: 12px 0;
+            color: #6f5a60;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .button-container {
+            margin: 30px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: #9e182b;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .warning {
+            margin-top: 25px !important;
+            padding: 15px;
+            background-color: #fdf0f3;
+            border-radius: 10px;
+            color: #7d4b55 !important;
+            font-size: 13px !important;
+        }
+
+        .footer {
+            padding: 22px 30px;
+            background-color: #faf7f8;
+            text-align: center;
+            border-top: 1px solid #f1e3e6;
+        }
+
+        .footer p {
+            margin: 0;
+            color: #927d83;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .email-container {
+                padding: 20px 10px;
+            }
+
+            .content {
+                padding: 30px 22px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 
-<body class="recuperar-senha-page">
+<body>
 
-    <section class="login-page">
+    <div class="email-container">
 
-        <div class="login-left">
+        <div class="email-card">
 
-            <div class="decor-circle decor-circle--top"></div>
-            <div class="decor-circle decor-circle--bottom"></div>
+            <div class="header">
 
-            <div class="brand">
-                <img src="{{ asset('images/logoVenus.png') }}" alt="Vênus - A saúde da Mulher na palma da sua mão" class="logo">
+                <h1>Recuperação de senha</h1>
+
             </div>
 
-            <div class="info-card" style="background-image: url('{{ asset('images/RetanguloLogin.png') }}');">
-                <span class="info-badge">CRM &middot; CRP &middot; COREN &middot; CRESS</span>
-                <h2>Conectando profissionais à saúde da mulher</h2>
-                <p>Atendimento com sigilo, acolhimento e responsabilidade.</p>
-            </div>
+            <div class="content">
 
-        </div>
+                <h2>Olá!</h2>
 
-        <div class="login-right">
-
-            <div class="login-box">
-
-                <a href="{{ url('/welcome') }}" class="back-link">&larr; Voltar para o login</a>
-
-                <div class="icon-circle">
-                    <span class="icon-envelope">&#9993;</span>
-                </div>
-
-                <span class="eyebrow">Recuperação do acesso</span>
-                <h1>Esqueceu sua senha?</h1>
-                <p class="subtitle">
-                    Informe o e-mail profissional cadastrado. Enviaremos um link
-                    para criar uma nova senha.
+                <p>
+                    Você solicitou a recuperação da sua senha
+                    no <strong>Vênus</strong>.
                 </p>
 
-                <form action="{{ url('emails.esqueci-senha') }}" method="post" class="login-form">
-                    @csrf
+                <p>
+                    Para criar uma nova senha, clique no botão abaixo:
+                </p>
 
-                    <div class="field">
-                        <label for="emailProfissional">E-mail profissional</label>
-                        <input
-                            type="email"
-                            name="emailProfissional"
-                            id="emailProfissional"
-                            placeholder="seu@email.com"
-                            value="{{ old('emailProfissional') }}"
-                            required>
-                    </div>
+                <div class="button-container">
 
-                    @if ($errors->has('emailProfissional'))
-                        <div class="alert-success">
-                            <p>Chave de recuperação criada!</p>
-                        </div>
-                    @endif
+                    <a
+                        href="{{ url('emails.redefinir-senha/' . $chave) }}"
+                        class="button"
+                    >
+                        Redefinir minha senha
+                    </a>
 
-                    @if (session('sucesso'))
-                        <div class="alert-success">
-                            <p>{{ session('sucesso') }}</p>
-                        </div>
-                    @endif
+                </div>
 
-                    <button type="submit" class="btn-primary">Enviar link de recuperação</button>
+                <p class="warning">
+                    Este link ficará disponível por apenas
+                    <strong>10 minutos</strong>.
+                </p>
 
-                    <p class="footer-note">
-                        Por segurança, não informamos se um endereço está ou não cadastrado.
-                    </p>
-                </form>
+                <p>
+                    Se você não solicitou essa recuperação,
+                    pode ignorar este e-mail com segurança.
+                </p>
+
+            </div>
+
+            <div class="footer">
+
+                <p>
+                    Este é um e-mail automático. Por favor, não responda.
+                </p>
+
+                <p>
+                    © {{ date('Y') }} Vênus — Saúde da Mulher
+                </p>
 
             </div>
 
         </div>
 
-    </section>
+    </div>
 
 </body>
 
