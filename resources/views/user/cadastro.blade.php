@@ -165,8 +165,8 @@
                                 <label for="categoria">Categoria profissional</label>
                                 <select name="categoria" id="categoria" required>
                                     <option value="">Selecione</option>
-                                    <option value="Médica">Médica</option>
-                                    <option value="Enfermeira">Enfermeira</option>
+                                    <option value="Médico">Médica</option>
+                                    <option value="Enfermeiro">Enfermeira</option>
                                     <option value="Psicologo">Psicóloga</option>
                                     <option value="Outro">Outro</option>
                                 </select>
@@ -237,7 +237,7 @@
                     {{-- ===================== PASSO 3 - DOCUMENTOS ===================== --}}
                     <div class="form-step" data-step="3">
 
-                        <!-- <span class="step-count">3 DE 4</span>
+                        <span class="step-count">3 DE 4</span>
                         <h2 class="step-title">Documento para verificação</h2>
                         <p class="step-subtitle">Envie os documentos solicitados para validar seu cadastro profissional.</p>
 
@@ -263,7 +263,7 @@
 
                         <div class="info-note">
                             Os documentos serão usados exclusivamente para análise e verificação do cadastro profissional.
-                        </div> -->
+                        </div>
 
                         <div class="wizard-actions">
                             <button type="button" class="btn-outline btn-prev" data-prev="2">Voltar</button>
