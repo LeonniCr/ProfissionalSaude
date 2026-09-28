@@ -31,6 +31,8 @@ return new class extends Migration
             $table->string('fotoPerfilProfissional', 255)->nullable();
             $table->enum('statusVerificacao', ['Em análise', 'Aprovado', 'Pendência'])->default('Em análise');
             $table->enum('statusConta', ['Ativa', 'Suspensa', 'Excluída'])->default('Ativa');
+            $table->string('comprovanteConselhoClasseProfissional', 255)->nullable();
+            $table->string('documentoComplementarProfissional', 255)->nullable();
             $table->timestamp('dataCadastro')->useCurrent();
             $table->timestamp('dataAtualizacao')->useCurrent()->useCurrentOnUpdate();            
         });
