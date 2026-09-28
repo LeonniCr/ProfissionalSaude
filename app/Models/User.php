@@ -43,6 +43,8 @@ class User extends Authenticatable
         'fotoPerfilProfissional',
         'statusVerificacao',
         'statusConta',
+        'comprovanteConselhoClasseProfissional',
+        'documentoComplementarProfissional',
     ];
 
     /**
