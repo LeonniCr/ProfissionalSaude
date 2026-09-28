@@ -58,16 +58,16 @@
                         <label for="emailProfissional">E-mail profissional</label>
                         <input
                             type="email"
-                            name="emailProfissional"
-                            id="emailProfissional"
+                            name="emailProfissionalSaude"
+                            id="emailProfissionalSaude"
                             placeholder="seu@email.com"
-                            value="{{ old('emailProfissional') }}"
+                            value="{{ old('emailProfissionalSaude') }}"
                             required>
                     </div>
 
-                    @if ($errors->has('emailProfissional'))
-                        <div class="alert-error">
-                            <p>{{ $errors->first('emailProfissional') }}</p>
+                    @if ($errors->has('emailProfissionalSaude'))
+                        <div class="alert-success">
+                            <p>Chave de recuperação criada!</p>
                         </div>
                     @endif
 
