@@ -249,7 +249,7 @@
                             </span>
                             <span class="upload-filename" data-filename-for="comprovanteConselho">Nenhum arquivo selecionado</span>
                         </label>
-                        <input type="file" name="comprovanteConselho" id="comprovanteConselho" class="upload-input" required>
+                        <input type="file" name="comprovanteConselho" id="comprovanteConselho" class="upload-input">
 
                         <label class="upload-box upload-box--big" for="docComplementar">
                             <span class="upload-icon">&#8593;</span>
@@ -316,9 +316,23 @@
 
                         <div class="wizard-actions">
                             <button type="button" class="btn-outline btn-prev" data-prev="3">Voltar</button>
-                            <button type="submit" class="btn-primary">Continuar</button>
+                            <button type="button" class="btn-primary" onclick="abrirModal()">Continuar</button>
                         </div>
 
+                    </div>
+
+                    {{-- ===================== MODAL DESATIVAR CONTA ===================== --}}
+                    <div id="modalDesativar" class="modal-overlay" style="display: none;">
+                        <div class="modal-box">
+                            <h2>Criar conta</h2>
+                            <p>Tem certeza que deseja criar uma conta?</p>
+
+                            <div class="modal-actions">
+                                <button type="button" class="btn-outline-sm" onclick="fecharModal()" style="justify-content: center;">Cancelar</button>
+
+                                <button type="submit" class="btn-danger">Criar</button>
+                            </div>
+                        </div>
                     </div>
 
                 </form>
@@ -335,6 +349,14 @@
     </section>
 
     <script>
+        function abrirModal() {
+            document.getElementById('modalDesativar').style.display = 'flex';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalDesativar').style.display = 'none';
+        }
+
         document.getElementById('cep').addEventListener('blur', function () {
 
         let cep = this.value.replace(/\D/g, '');
