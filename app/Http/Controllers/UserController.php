@@ -83,6 +83,13 @@ class UserController extends Controller
                 ->withInput();
         }
 
+        $caminhoFoto = null;
+        if ($request->hasFile('fotoPerfil')) {
+            $caminhoFoto = $request->file('fotoPerfil')
+                ->store('fotos-profissionais', 'public');
+        }
+
+
         User::create([
             'nomeProfissionalSaude' => $request->nome,
             'emailProfissionalSaude' => $request->email,
@@ -99,7 +106,7 @@ class UserController extends Controller
             'ufProfissional'=>$request->uf,
             'cepProfissional'=>$request->cep,
             'nrFiscalProfissional'=>$request->nrFiscal,
-            'fotoPerfilProfissional' => $request->fotoPerfil,
+            'fotoPerfilProfissional' => $caminhoFoto,
             'statusVerificacao' => 'Em análise',
             'statusConta' => 'Ativa',
             'comprovanteConselhoClasseProfissional' => $request->comprovanteConselho,
