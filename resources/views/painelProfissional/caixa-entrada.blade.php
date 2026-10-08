@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Caixa de Entrada | Vênus</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +43,7 @@
                     <a href="{{ url('/caixa-de-entrada') }}" class="nav-item active">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
                         <span>Caixa de Entrada</span>
-                        <span class="nav-badge">5</span>
+                        <span class="nav-badge" id="navBadge" style="display: none;">0</span>
                     </a>
 
                     <a href="#" class="nav-item">
@@ -140,7 +141,7 @@
                     <a href="{{ url('/caixa-de-entrada') }}" style="display: inline-flex; align-items: center; text-decoration: none; color: inherit;">
                         <svg class="topbar-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
                     </a>
-                    
+
                     <div class="topbar-user">
                         @if (!empty($profissional->fotoPerfilProfissional))
                             <img class="avatar-circle" src="{{ asset('storage/' . $profissional->fotoPerfilProfissional) }}" alt="Foto do profissional">
@@ -156,216 +157,295 @@
                 </div>
             </header>
 
-                <main class="page-content">
+            <main class="page-content">
 
-    <div class="page-header">
-        <div>
-            <h1>Caixa de Entrada</h1>
-            <p class="subtitle">Gerencie as suas conversas em um único lugar.</p>
-        </div>
+                <div class="page-header">
+                    <div>
+                        <h1>Caixa de Entrada</h1>
+                        <p class="subtitle">Converse com outros profissionais em um único lugar.</p>
+                    </div>
 
-        <a href="#" class="btn-outline-sm">Limpar Filtros</a>
-    </div>
-
-    <div class="inbox-grid">
-
-        {{-- ===================== LISTA DE CONVERSAS ===================== --}}
-        <div class="inbox-list card">
-
-            <div class="inbox-tabs">
-                <a href="#" class="inbox-tab active">Todas <span class="inbox-tab-count">18</span></a>
-                <a href="#" class="inbox-tab">Não lidas <span class="inbox-tab-count">5</span></a>
-                <a href="#" class="inbox-tab">Agendadas <span class="inbox-tab-count">6</span></a>
-                <a href="#" class="inbox-tab">Dúvidas rápidas <span class="inbox-tab-count">4</span></a>
-                <a href="#" class="inbox-tab">Arquivadas</a>
-            </div>
-
-            <div class="inbox-search">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" /></svg>
-                <input type="text" placeholder="Buscar pelo nome da usuária...">
-            </div>
-
-            <div class="queue-item inbox-item" data-conv="ana">
-                <span class="avatar-circle">A</span>
-                <div class="queue-info">
-                    <strong>Ana Beatriz</strong>
-                    <span>Tenho dúvida sobre anticoncepcional…</span>
-                    <span class="badge-duvida">Dúvida rápida</span>
+                    <a href="#" class="btn-outline-sm" id="btnLimpar">Limpar Filtros</a>
                 </div>
-                <span class="queue-time">10:30</span>
-                <span class="badge-unread">1</span>
-            </div>
 
-            <div class="queue-item inbox-item" data-conv="camila">
-                <span class="avatar-circle">C</span>
-                <div class="queue-info">
-                    <strong>Camila Ferreira</strong>
-                    <span>Obrigada pela orientação!</span>
-                    <span class="badge-chat">Consulta por chat</span>
-                </div>
-                <span class="queue-time">09:45</span>
-            </div>
+                <div class="inbox-grid">
 
-            <div class="queue-item inbox-item" data-conv="mariana">
-                <span class="avatar-circle">M</span>
-                <div class="queue-info">
-                    <strong>Mariana Lima</strong>
-                    <span>Anexei o resultado do exame.</span>
-                    <span class="badge-agendada">Agendada</span>
-                </div>
-                <span class="queue-time">Ontem</span>
-            </div>
+                    {{-- ===================== LISTA ===================== --}}
+                    <div class="inbox-list card">
 
-            <div class="queue-item inbox-item" data-conv="juliana">
-                <span class="avatar-circle">J</span>
-                <div class="queue-info">
-                    <strong>Juliana Santos</strong>
-                    <span>Tudo certo, obrigada!</span>
-                    <span class="badge-chat">Consulta por chat</span>
-                </div>
-                <span class="queue-time">Ontem</span>
-            </div>
-
-            <div class="queue-item inbox-item" data-conv="ester">
-                <span class="avatar-circle">E</span>
-                <div class="queue-info">
-                    <strong>Ester Reis</strong>
-                    <span>Olá, doutora! Estou com uma dúvida…</span>
-                    <span class="badge-duvida">Dúvida rápida</span>
-                </div>
-                <span class="queue-time">Seg</span>
-                <span class="badge-unread">1</span>
-            </div>
-
-        </div>
-
-        {{-- ===================== PAINEL DO CHAT ===================== --}}
-        <div class="card inbox-panel">
-
-            {{-- Estado vazio (antes de clicar) --}}
-            <div class="inbox-empty" id="inboxEmpty">
-                <div class="inbox-envelope">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
-                </div>
-                <strong>Selecione uma conversa</strong>
-                <p>Escolha uma usuária na lista ao lado para visualizar o atendimento.</p>
-            </div>
-
-            {{-- Chat aberto (preenchido via JS) --}}
-                <div id="inboxChat" style="display: none;">
-
-                    <div class="chat-head">
-                        <span class="avatar-circle" id="chatAvatar">A</span>
-                        <div>
-                            <strong id="chatNome">Ana Beatriz</strong>
-                            <span class="chat-status" id="chatStatus">Online agora</span>
+                        <div class="inbox-tabs">
+                            <a href="#" class="inbox-tab active" data-filtro="todas">Todas <span class="inbox-tab-count" id="cntTodas">0</span></a>
+                            <a href="#" class="inbox-tab" data-filtro="naolidas">Não lidas <span class="inbox-tab-count" id="cntNaoLidas">0</span></a>
                         </div>
+
+                        <div class="inbox-search">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" /></svg>
+                            <input type="text" id="inboxBusca" placeholder="Buscar pelo nome do profissional..." autocomplete="off">
+                        </div>
+
+                        <div id="inboxLista"></div>
                     </div>
 
-                    {{-- aviso de sigilo lá no topo --}}
-                    <div class="chat-warning">Sigilo médico: esta conversa é confidencial e deve ser utilizada exclusivamente para o atendimento.</div>
+                    {{-- ===================== CHAT ===================== --}}
+                    <div class="card inbox-panel">
 
-                    <div class="chat-body" id="chatBody"></div>
+                        <div class="inbox-empty" id="inboxEmpty">
+                            <div class="inbox-envelope">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
+                            </div>
+                            <strong>Selecione uma conversa</strong>
+                            <p>Escolha um profissional na lista ou pesquise pelo nome para começar.</p>
+                        </div>
 
-                    <div class="chat-input">
-                        <button type="button">+</button>
-                        <input type="text" placeholder="Digite sua mensagem…">
-                        <button type="button" class="chat-send">➤</button>
+                        <div id="inboxChat" style="display: none;">
+
+                            <div class="chat-head">
+                                <span id="chatAvatar"></span>
+                                <div>
+                                    <strong id="chatNome"></strong>
+                                    <span class="chat-status" id="chatStatus"></span>
+                                </div>
+                            </div>
+
+                            <div class="chat-warning">Sigilo médico: esta conversa é confidencial e deve ser utilizada exclusivamente para o atendimento.</div>
+
+                            <div class="chat-body" id="chatBody"></div>
+
+                            <div class="chat-input">
+                                <input type="text" id="chatTexto" placeholder="Digite sua mensagem…" maxlength="2000" autocomplete="off">
+                                <button type="button" class="chat-send" id="chatEnviar">➤</button>
+                            </div>
+
+                        </div>
+
                     </div>
 
                 </div>
+
+            </main>
 
         </div>
 
     </div>
 
-</main>
+    <script>
+        var CSRF = document.querySelector('meta[name="csrf-token"]').content;
+        var STORAGE = "{{ asset('storage') }}";
+        var estado = { filtro: 'todas', conversas: [], resultados: [], termo: '', aberto: null };
 
-<script>
-    var conversas = {
-        ana: {
-            nome: 'Ana Beatriz',
-            inicial: 'A',
-            status: 'Online agora',
-            mensagens: [
-                { de: 'ela', texto: 'Olá, doutora! Estou com uma dúvida e queria saber se pode me orientar.', hora: '10:30' },
-                { de: 'ela', texto: 'Tenho algumas informações que gostaria de entender melhor antes de marcar um atendimento.', hora: '10:30' },
-            ]
-        },
-        camila: {
-            nome: 'Camila Ferreira',
-            inicial: 'C',
-            status: 'Consulta por chat',
-            mensagens: [
-                { de: 'ela', texto: 'Doutora, muito obrigada pela orientação do outro dia!', hora: '09:45' },
-                { de: 'voce', texto: 'Por nada, Camila! Fico feliz que tenha esclarecido suas dúvidas. 😊', hora: '09:50' },
-            ]
-        },
-        mariana: {
-            nome: 'Mariana Lima',
-            inicial: 'M',
-            status: 'Agendada',
-            mensagens: [
-                { de: 'ela', texto: 'Anexei o resultado do exame no portal.', hora: 'Ontem' },
-                { de: 'voce', texto: 'Recebi, Mariana! Vou analisar e já te retorno.', hora: 'Ontem' },
-            ]
-        },
-        juliana: {
-            nome: 'Juliana Santos',
-            inicial: 'J',
-            status: 'Consulta por chat',
-            mensagens: [
-                { de: 'ela', texto: 'Tudo certo com os medicamentos, doutora. Muito obrigada!', hora: 'Ontem' },
-            ]
-        },
-        ester: {
-            nome: 'Ester Reis',
-            inicial: 'E',
-            status: 'Online agora',
-            mensagens: [
-                { de: 'ela', texto: 'Olá, doutora! Estou com uma dúvida sobre os exames.', hora: 'Seg' },
-                { de: 'ela', texto: 'Posso enviar uma mensagem para esclarecer?', hora: 'Seg' },
-            ]
+        var elLista = document.getElementById('inboxLista');
+        var elBusca = document.getElementById('inboxBusca');
+        var elEmpty = document.getElementById('inboxEmpty');
+        var elChat = document.getElementById('inboxChat');
+        var elBody = document.getElementById('chatBody');
+        var elTexto = document.getElementById('chatTexto');
+        var elEnviar = document.getElementById('chatEnviar');
+
+        function api(url, opcoes) {
+            opcoes = opcoes || {};
+            opcoes.headers = Object.assign({ 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF }, opcoes.headers || {});
+            return fetch(url, opcoes).then(function (r) {
+                if (!r.ok) throw new Error(r.status);
+                return r.json();
+            });
         }
-    };
 
-    var itens = document.querySelectorAll('.inbox-item');
-    var empty = document.getElementById('inboxEmpty');
-    var chat = document.getElementById('inboxChat');
-    var chatBody = document.getElementById('chatBody');
-    var chatNome = document.getElementById('chatNome');
-    var chatAvatar = document.getElementById('chatAvatar');
-    var chatStatus = document.getElementById('chatStatus');
+        function criarAvatar(u) {
+            if (u.foto) {
+                var img = document.createElement('img');
+                img.className = 'avatar-circle';
+                img.src = STORAGE + '/' + u.foto;
+                img.alt = u.nome;
+                return img;
+            }
+            var s = document.createElement('span');
+            s.className = 'avatar-circle';
+            s.textContent = u.inicial;
+            return s;
+        }
 
-    itens.forEach(function (item) {
-        item.addEventListener('click', function () {
-            itens.forEach(function (i) { i.classList.remove('inbox-item-active'); });
-            item.classList.add('inbox-item-active');
+        function tx(tag, classe, texto) {
+            var e = document.createElement(tag);
+            if (classe) e.className = classe;
+            e.textContent = texto;
+            return e;
+        }
 
-            var c = conversas[item.dataset.conv];
-            if (!c) return;
-
-            chatNome.textContent = c.nome;
-            chatAvatar.textContent = c.inicial;
-            chatStatus.textContent = c.status;
-            chatBody.innerHTML = '';
-
-            c.mensagens.forEach(function (m) {
-                var div = document.createElement('div');
-                div.className = 'chat-msg ' + (m.de === 'voce' ? 'chat-msg--me' : 'chat-msg--her');
-                div.innerHTML = '<p>' + m.texto + '</p><span>' + m.hora + '</span>';
-                chatBody.appendChild(div);
+        // ---------- Lista ----------
+        function renderLista() {
+            elLista.innerHTML = '';
+            var buscando = estado.termo !== '';
+            var itens = buscando ? estado.resultados : estado.conversas.filter(function (c) {
+                return estado.filtro === 'todas' || c.naoLidas > 0;
             });
 
-            empty.style.display = 'none';
-            chat.style.display = 'flex';
+            if (buscando) elLista.appendChild(tx('div', 'inbox-label', 'Profissionais'));
+
+            if (!itens.length) {
+                elLista.appendChild(tx('div', 'inbox-vazio', buscando
+                    ? 'Nenhum profissional encontrado com esse nome.'
+                    : (estado.filtro === 'naolidas' ? 'Nenhuma mensagem não lida.' : 'Nenhuma conversa ainda. Pesquise o nome de um profissional para começar.')));
+                return;
+            }
+
+            itens.forEach(function (u) {
+                var item = document.createElement('div');
+                item.className = 'queue-item inbox-item' + (estado.aberto && estado.aberto.codigo === u.codigo ? ' inbox-item-active' : '');
+                item.appendChild(criarAvatar(u));
+
+                var info = document.createElement('div');
+                info.className = 'queue-info';
+                info.appendChild(tx('strong', '', u.nome));
+                info.appendChild(tx('span', 'inbox-preview', buscando ? (u.subtitulo || 'Profissional') : ((u.minha ? 'Você: ' : '') + u.ultima)));
+                item.appendChild(info);
+
+                if (!buscando) {
+                    item.appendChild(tx('span', 'queue-time', u.hora));
+                    if (u.naoLidas > 0) item.appendChild(tx('span', 'badge-unread', u.naoLidas));
+                }
+
+                item.addEventListener('click', function () { abrirConversa(u); });
+                elLista.appendChild(item);
+            });
+        }
+
+        function atualizarConversas() {
+            return api('/caixa-de-entrada/conversas').then(function (lista) {
+                estado.conversas = lista;
+                var nao = lista.reduce(function (t, c) { return t + c.naoLidas; }, 0);
+                document.getElementById('cntTodas').textContent = lista.length;
+                document.getElementById('cntNaoLidas').textContent = nao;
+                var badge = document.getElementById('navBadge');
+                badge.textContent = nao;
+                badge.style.display = nao > 0 ? '' : 'none';
+                if (estado.termo === '') renderLista();
+            }).catch(function () {});
+        }
+
+        // ---------- Chat ----------
+        function renderMensagens(mensagens) {
+            var perto = elBody.scrollHeight - elBody.scrollTop - elBody.clientHeight < 80;
+            elBody.innerHTML = '';
+
+            if (!mensagens.length) {
+                elBody.appendChild(tx('div', 'inbox-vazio', 'Nenhuma mensagem ainda. Diga olá! 👋'));
+            }
+
+            mensagens.forEach(function (m) { elBody.appendChild(criarMensagem(m)); });
+            if (perto || estado.rolar) elBody.scrollTop = elBody.scrollHeight;
+            estado.rolar = false;
+        }
+
+        function criarMensagem(m) {
+            var div = document.createElement('div');
+            div.className = 'chat-msg ' + (m.minha ? 'chat-msg--me' : 'chat-msg--her');
+            div.appendChild(tx('p', '', m.texto));
+            div.appendChild(tx('span', '', m.hora));
+            return div;
+        }
+
+        function carregarMensagens() {
+            var alvo = estado.aberto;
+            if (!alvo) return;
+            api('/caixa-de-entrada/mensagens/' + alvo.codigo).then(function (d) {
+                if (!estado.aberto || estado.aberto.codigo !== alvo.codigo) return;
+                renderMensagens(d.mensagens);
+                atualizarConversas();
+            }).catch(function () {});
+        }
+
+        function abrirConversa(u) {
+            estado.aberto = u;
+            estado.rolar = true;
+
+            var wrap = document.getElementById('chatAvatar');
+            wrap.innerHTML = '';
+            wrap.appendChild(criarAvatar(u));
+            document.getElementById('chatNome').textContent = u.nome;
+            document.getElementById('chatStatus').textContent = u.subtitulo || 'Profissional';
+
+            elEmpty.style.display = 'none';
+            elChat.style.display = 'flex';
+            elBody.innerHTML = '';
+            renderLista();
+            carregarMensagens();
+            elTexto.focus();
+        }
+
+        function enviar() {
+            var texto = elTexto.value.trim();
+            if (!texto || !estado.aberto) return;
+
+            elEnviar.disabled = true;
+            api('/caixa-de-entrada/enviar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ destinatario: estado.aberto.codigo, texto: texto })
+            }).then(function (m) {
+                elTexto.value = '';
+                if (elBody.querySelector('.inbox-vazio')) elBody.innerHTML = '';
+                elBody.appendChild(criarMensagem(m));
+                elBody.scrollTop = elBody.scrollHeight;
+                atualizarConversas();
+            }).catch(function () {
+                alert('Não foi possível enviar a mensagem. Tente novamente.');
+            }).then(function () {
+                elEnviar.disabled = false;
+                elTexto.focus();
+            });
+        }
+
+        elEnviar.addEventListener('click', enviar);
+        elTexto.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { e.preventDefault(); enviar(); }
         });
-    });
-</script>
 
-        </div>
+        // ---------- Busca ----------
+        var temporizador = null;
+        elBusca.addEventListener('input', function () {
+            clearTimeout(temporizador);
+            var termo = elBusca.value.trim();
+            estado.termo = termo;
 
-    </div>
+            if (termo === '') { renderLista(); return; }
+
+            temporizador = setTimeout(function () {
+                api('/caixa-de-entrada/buscar?q=' + encodeURIComponent(termo)).then(function (r) {
+                    if (estado.termo !== termo) return;
+                    estado.resultados = r;
+                    renderLista();
+                }).catch(function () {});
+            }, 250);
+        });
+
+        // ---------- Abas e limpar ----------
+        document.querySelectorAll('.inbox-tab').forEach(function (aba) {
+            aba.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelectorAll('.inbox-tab').forEach(function (a) { a.classList.remove('active'); });
+                aba.classList.add('active');
+                estado.filtro = aba.dataset.filtro;
+                renderLista();
+            });
+        });
+
+        document.getElementById('btnLimpar').addEventListener('click', function (e) {
+            e.preventDefault();
+            elBusca.value = '';
+            estado.termo = '';
+            estado.filtro = 'todas';
+            document.querySelectorAll('.inbox-tab').forEach(function (a) {
+                a.classList.toggle('active', a.dataset.filtro === 'todas');
+            });
+            renderLista();
+        });
+
+        // ---------- Início e atualização automática ----------
+        atualizarConversas();
+        setInterval(function () {
+            if (estado.aberto) carregarMensagens(); else atualizarConversas();
+        }, 5000);
+    </script>
 
 </body>
 

@@ -48,7 +48,9 @@
                             <path d="M3 7l9 6 9-6" />
                         </svg>
                         <span>Caixa de Entrada</span>
-                        <span class="nav-badge">5</span>
+                        @if (($naoLidas ?? 0) > 0)
+                            <span class="nav-badge">{{ $naoLidas }}</span>
+                        @endif
                     </a>
 
                     <a href="#" class="nav-item">

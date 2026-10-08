@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\MensagemController;
 
 
 //Públicas
@@ -31,6 +32,10 @@ Route::middleware('autenticacao')->group(function () {
 Route::get('/configuracoes', [UserController::class, 'configuracoes'])->name('painel.configuracoes');
 
 Route::get('/caixa-de-entrada', [UserController::class, 'caixaEntrada']);
+Route::get('/caixa-de-entrada/conversas', [MensagemController::class, 'conversas']);
+Route::get('/caixa-de-entrada/buscar', [MensagemController::class, 'buscar']);
+Route::get('/caixa-de-entrada/mensagens/{id}', [MensagemController::class, 'mensagens']);
+Route::post('/caixa-de-entrada/enviar', [MensagemController::class, 'enviar']);
 
 Route::get('/suporte', [UserController::class, 'suporte'])->name('painel.suporte');
     

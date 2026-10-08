@@ -42,7 +42,9 @@
                     <a href="{{ url('/caixa-de-entrada') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
                         <span>Caixa de Entrada</span>
-                        <span class="nav-badge">5</span>
+                        @if (($naoLidas ?? 0) > 0)
+                            <span class="nav-badge">{{ $naoLidas }}</span>
+                        @endif
                     </a>
 
                     <a href="#" class="nav-item">

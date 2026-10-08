@@ -2761,3 +2761,27 @@ a.cf-row:hover svg { transform: translateX(3px); color: var(--maroon); }
 @media (max-width: 900px) {
     .cf-grid { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================
+   CAIXA DE ENTRADA (funcional) ç
+   leonni q fezzz
+   ========================================================== */
+
+.inbox-list { max-height: calc(100vh - 190px); overflow-y: auto; }
+.inbox-panel { height: calc(100vh - 190px); min-height: 520px; }
+#inboxChat { min-height: 0; }
+.chat-body { min-height: 0; overflow-y: auto; padding-right: 4px; }
+.chat-msg p { white-space: pre-wrap; word-break: break-word; }
+
+.inbox-item .avatar-circle { width: 38px; height: 38px; font-size: 15px; }
+.inbox-item .queue-info { flex: 1; min-width: 0; }
+.inbox-preview { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inbox-item .queue-time { margin-left: 8px; }
+.inbox-item:hover { background: #fffafa; }
+
+.inbox-label { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--text-muted); padding: 4px 18px 6px; }
+.inbox-vazio { font-size: 12.5px; color: var(--text-muted); text-align: center; padding: 28px 24px; line-height: 1.5; }
+
+.chat-input input { min-width: 0; }
+.chat-input input:focus { border-color: var(--maroon); background: var(--white); }
+.chat-send:disabled { opacity: .6; cursor: default; }
