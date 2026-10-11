@@ -184,12 +184,42 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6" /></svg>
                         </a>
 
-                        <div class="cf-row">
-                            <strong>Sessões ativas</strong>
-                            <span>2 dispositivos
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6" /></svg>
-                            </span>
-                        </div>
+                        <div class="cf-row cf-sessoes-header">
+    <strong>Sessões ativas</strong>
+    <span class="cf-sessoes-count" id="cfSessoesTotal">2 dispositivos</span>
+</div>
+
+<div class="cf-sessoes-lista" id="cfSessoesLista">
+
+    <div class="cf-sessao-item atual">
+        <span class="cf-sessao-icone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M2 20h20" /></svg>
+        </span>
+        <div class="cf-sessao-info">
+            <div class="cf-sessao-nome">
+                <strong>Chrome · Windows</strong>
+                <span class="cf-badge-atual">Este dispositivo</span>
+            </div>
+            <div class="cf-sessao-detalhes">São Paulo, SP · Ativo agora</div>
+        </div>
+    </div>
+
+    <div class="cf-sessao-item">
+            <span class="cf-sessao-icone">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2" /><path d="M11 18h2" /></svg>
+            </span>
+            <div class="cf-sessao-info">
+                <div class="cf-sessao-nome">
+                    <strong>Safari · iPhone</strong>
+                </div>
+                <div class="cf-sessao-detalhes">São Paulo, SP · Há 2 horas</div>
+            </div>
+            <button type="button" class="cf-btn-revogar" title="Encerrar sessão" aria-label="Encerrar sessão">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </button>
+        </div>
+
+    </div>
                     </div>
 
                     {{-- ============ SEGURANÇA ============ --}}
@@ -305,6 +335,16 @@
             btn.addEventListener('click', function () {
                 document.querySelectorAll('#cfTema .cf-theme-btn').forEach(function (b) { b.classList.remove('active'); });
                 btn.classList.add('active');
+            });
+        });
+
+                // Encerrar sessão (somente visual por enquanto)
+        document.querySelectorAll('.cf-btn-revogar').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                btn.closest('.cf-sessao-item').remove();
+
+                var total = document.querySelectorAll('#cfSessoesLista .cf-sessao-item').length;
+                document.getElementById('cfSessoesTotal').textContent = total + (total === 1 ? ' dispositivo' : ' dispositivos');
             });
         });
     </script>
