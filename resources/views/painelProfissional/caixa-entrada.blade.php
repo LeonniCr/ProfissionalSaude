@@ -61,7 +61,7 @@
                 <div class="nav-group">
                     <p class="nav-group-label">Gestão</p>
 
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('conteudos.index') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
                         <span>Conteúdos</span>
                     </a>
