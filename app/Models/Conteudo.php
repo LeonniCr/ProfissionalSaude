@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Conteudo extends Model
+{
+    protected $table = 'tbconteudo';
+    protected $primaryKey = 'codConteudo';
+
+    // As colunas de data têm nomes próprios
+    const CREATED_AT = 'dataCriacao';
+    const UPDATED_AT = 'dataAtualizacao';
+
+    public const STATUS = [
+        'rascunho'   => 'Rascunho',
+        'em_revisao' => 'Em revisão',
+        'publicado'  => 'Publicado',
+        'recusado'   => 'Recusado',
+    ];
+
+    protected $fillable = [
+        'tituloConteudo',
+        'corpoConteudo',
+        'capaConteudo',
+        'tempoLeituraMinutos',
+        'codTipoCategoria',
+        'codTipoConteudo',
+        'codProfissionalSaude',
+        'statusConteudo',
+    ];
+
+    public function categoria(): BelongsTo
+    {
+        return $this->belongsTo(TipoCategoria::class, 'codTipoCategoria', 'codTipoCategoria');
+    }
+
+    public function tipo(): BelongsTo
+    {
+        return $this->belongsTo(TipoConteudo::class, 'codTipoConteudo', 'codTipoConteudo');
+    }
+
+    public function profissional(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'codProfissionalSaude', 'codProfissionalSaude');
+    }
+
+    public function getStatusRotuloAttribute(): string
+    {
+        return self::STATUS[$this->statusConteudo] ?? $this->statusConteudo;
+    }
+
+    /** Estima o tempo de leitura (200 palavras por minuto). */
+    public static function calcularTempoLeitura(?string $corpo): ?int
+    {
+        $palavras = preg_match_all('/\S+/u', strip_tags((string) $corpo));
+
+        return $palavras ? max(1, (int) ceil($palavras / 200)) : null;
+    }
+}
