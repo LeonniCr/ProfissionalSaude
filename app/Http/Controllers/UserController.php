@@ -422,6 +422,12 @@ class UserController extends Controller
         return view('painelProfissional.caixa-entrada', compact('profissional'));
     }
 
+    public function conteudo(){
+        $profissional = User::find(session('id'));
+
+        return view('painelProfissional.conteudo', compact('profissional'));
+    }
+
     public function suporte(){
         $profissional = User::find(session('id'));
 
