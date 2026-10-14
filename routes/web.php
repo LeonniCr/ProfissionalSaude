@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MensagemController;
+use App\Http\Controllers\ConteudoController;
 
 
 //Públicas
@@ -36,6 +37,10 @@ Route::get('/caixa-de-entrada/conversas', [MensagemController::class, 'conversas
 Route::get('/caixa-de-entrada/buscar', [MensagemController::class, 'buscar']);
 Route::get('/caixa-de-entrada/mensagens/{id}', [MensagemController::class, 'mensagens']);
 Route::post('/caixa-de-entrada/enviar', [MensagemController::class, 'enviar']);
+
+Route::get('/conteudo', [ConteudoController::class, 'index'])->name('conteudos.index');
+Route::post('/conteudo', [ConteudoController::class, 'store'])->name('conteudos.store');
+Route::put('/conteudo/{id}', [ConteudoController::class, 'update'])->name('conteudos.update');
 
 Route::get('/suporte', [UserController::class, 'suporte'])->name('painel.suporte');
     
