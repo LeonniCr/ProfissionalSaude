@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MensagemController;
 use App\Http\Controllers\ConteudoController;
+use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\PacienteController;
 
 
 //Públicas
@@ -41,6 +43,14 @@ Route::post('/caixa-de-entrada/enviar', [MensagemController::class, 'enviar']);
 Route::get('/conteudo', [ConteudoController::class, 'index'])->name('conteudos.index');
 Route::post('/conteudo', [ConteudoController::class, 'store'])->name('conteudos.store');
 Route::put('/conteudo/{id}', [ConteudoController::class, 'update'])->name('conteudos.update');
+
+Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
+Route::post('/agenda/bloqueios', [AgendaController::class, 'bloquear'])->name('agenda.bloquear');
+Route::delete('/agenda/bloqueios/{id}', [AgendaController::class, 'desbloquear'])->name('agenda.desbloquear');
+Route::get('/agenda/consultas/{id}/editar', [AgendaController::class, 'editar'])->name('agenda.consultas.editar');
+Route::put('/agenda/consultas/{id}', [AgendaController::class, 'atualizar'])->name('agenda.consultas.atualizar');
+
+Route::get('/pacientes', [PacienteController::class, 'index'])->name('pacientes.index');
 
 Route::get('/suporte', [UserController::class, 'suporte'])->name('painel.suporte');
     
