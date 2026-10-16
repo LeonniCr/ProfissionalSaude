@@ -163,7 +163,7 @@
                 <div class="page-header">
                     <div>
                         <h1>Caixa de Entrada</h1>
-                        <p class="subtitle">Converse com outros profissionais em um único lugar.</p>
+                        <p class="subtitle">Responda às usuárias que entraram em contato com você, em um único lugar.</p>
                     </div>
 
                     <a href="#" class="btn-outline-sm" id="btnLimpar">Limpar Filtros</a>
@@ -181,7 +181,7 @@
 
                         <div class="inbox-search">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" /></svg>
-                            <input type="text" id="inboxBusca" placeholder="Buscar pelo nome do profissional..." autocomplete="off">
+                            <input type="text" id="inboxBusca" placeholder="Buscar pelo nome da usuária..." autocomplete="off">
                         </div>
 
                         <div id="inboxLista"></div>
@@ -195,7 +195,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
                             </div>
                             <strong>Selecione uma conversa</strong>
-                            <p>Escolha um profissional na lista ou pesquise pelo nome para começar.</p>
+                            <p>Escolha uma conversa na lista, ou pesquise pelo nome da usuária, para ver as mensagens.</p>
                         </div>
 
                         <div id="inboxChat" style="display: none;">
@@ -232,7 +232,7 @@
     <script>
         var CSRF = document.querySelector('meta[name="csrf-token"]').content;
         var STORAGE = "{{ asset('storage') }}";
-        var estado = { filtro: 'todas', conversas: [], resultados: [], termo: '', aberto: null };
+        var estado = { filtro: 'todas', conversas: [], termo: '', aberto: null };
 
         var elLista = document.getElementById('inboxLista');
         var elBusca = document.getElementById('inboxBusca');
@@ -273,19 +273,27 @@
         }
 
         // ---------- Lista ----------
+        // Tira acentos e maiúsculas para a busca achar "Jose" em "José"
+        function normalizar(t) {
+            return (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
         function renderLista() {
             elLista.innerHTML = '';
-            var buscando = estado.termo !== '';
-            var itens = buscando ? estado.resultados : estado.conversas.filter(function (c) {
-                return estado.filtro === 'todas' || c.naoLidas > 0;
+            var termo = normalizar(estado.termo);
+
+            // A busca e as abas só filtram conversas que já existem
+            var itens = estado.conversas.filter(function (c) {
+                var passaAba = estado.filtro === 'todas' || c.naoLidas > 0;
+                var passaBusca = termo === '' || normalizar(c.nome).indexOf(termo) !== -1;
+                return passaAba && passaBusca;
             });
 
-            if (buscando) elLista.appendChild(tx('div', 'inbox-label', 'Profissionais'));
-
             if (!itens.length) {
-                elLista.appendChild(tx('div', 'inbox-vazio', buscando
-                    ? 'Nenhum profissional encontrado com esse nome.'
-                    : (estado.filtro === 'naolidas' ? 'Nenhuma mensagem não lida.' : 'Nenhuma conversa ainda. Pesquise o nome de um profissional para começar.')));
+                var aviso = 'Nenhuma conversa ainda. Quando uma usuária enviar uma mensagem, ela aparecerá aqui.';
+                if (termo !== '') aviso = 'Nenhuma conversa encontrada com esse nome.';
+                else if (estado.filtro === 'naolidas') aviso = 'Nenhuma mensagem não lida.';
+                elLista.appendChild(tx('div', 'inbox-vazio', aviso));
                 return;
             }
 
@@ -297,13 +305,11 @@
                 var info = document.createElement('div');
                 info.className = 'queue-info';
                 info.appendChild(tx('strong', '', u.nome));
-                info.appendChild(tx('span', 'inbox-preview', buscando ? (u.subtitulo || 'Profissional') : ((u.minha ? 'Você: ' : '') + u.ultima)));
+                info.appendChild(tx('span', 'inbox-preview', (u.minha ? 'Você: ' : '') + u.ultima));
                 item.appendChild(info);
 
-                if (!buscando) {
-                    item.appendChild(tx('span', 'queue-time', u.hora));
-                    if (u.naoLidas > 0) item.appendChild(tx('span', 'badge-unread', u.naoLidas));
-                }
+                item.appendChild(tx('span', 'queue-time', u.hora));
+                if (u.naoLidas > 0) item.appendChild(tx('span', 'badge-unread', u.naoLidas));
 
                 item.addEventListener('click', function () { abrirConversa(u); });
                 elLista.appendChild(item);
@@ -319,7 +325,7 @@
                 var badge = document.getElementById('navBadge');
                 badge.textContent = nao;
                 badge.style.display = nao > 0 ? '' : 'none';
-                if (estado.termo === '') renderLista();
+                renderLista();
             }).catch(function () {});
         }
 
@@ -363,7 +369,7 @@
             wrap.innerHTML = '';
             wrap.appendChild(criarAvatar(u));
             document.getElementById('chatNome').textContent = u.nome;
-            document.getElementById('chatStatus').textContent = u.subtitulo || 'Profissional';
+            document.getElementById('chatStatus').textContent = u.subtitulo || 'Usuária';
 
             elEmpty.style.display = 'none';
             elChat.style.display = 'flex';
@@ -401,22 +407,10 @@
             if (e.key === 'Enter') { e.preventDefault(); enviar(); }
         });
 
-        // ---------- Busca ----------
-        var temporizador = null;
+        // ---------- Busca (só entre as conversas existentes) ----------
         elBusca.addEventListener('input', function () {
-            clearTimeout(temporizador);
-            var termo = elBusca.value.trim();
-            estado.termo = termo;
-
-            if (termo === '') { renderLista(); return; }
-
-            temporizador = setTimeout(function () {
-                api('/caixa-de-entrada/buscar?q=' + encodeURIComponent(termo)).then(function (r) {
-                    if (estado.termo !== termo) return;
-                    estado.resultados = r;
-                    renderLista();
-                }).catch(function () {});
-            }, 250);
+            estado.termo = elBusca.value.trim();
+            renderLista();
         });
 
         // ---------- Abas e limpar ----------
