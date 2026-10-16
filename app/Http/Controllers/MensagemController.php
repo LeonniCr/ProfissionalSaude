@@ -3,72 +3,98 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mensagem;
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 class MensagemController extends Controller
 {
-    private function eu(): int
+    private function eu()
     {
         return (int) session('id');
     }
-
-    private function usuario(User $u): array
+    
+    private function usuaria($u)
     {
+        if ($u->anonimaPadraoUsuario) {
+            $nome = 'Usuária anônima #' . $u->codUsuario;
+            $foto = null;
+            $subtitulo = 'Identidade preservada';
+        } else {
+            $nome = $u->apelidoUsuario ?: $u->nomeUsuario;
+            $foto = $u->fotoPerfilUsuario;
+            $subtitulo = 'Usuária';
+            if ($u->cidadeUsuario) {
+                $subtitulo = $u->cidadeUsuario . ($u->ufUsuario ? '/' . $u->ufUsuario : '');
+            }
+        }
+
         return [
-            'codigo' => $u->codProfissionalSaude,
-            'nome' => $u->nomeProfissionalSaude,
-            'inicial' => mb_strtoupper(mb_substr($u->nomeProfissionalSaude ?? 'P', 0, 1)),
-            'foto' => $u->fotoPerfilProfissional,
-            'subtitulo' => $u->especialidadeProfissionalSaude ?: $u->categoriaProfissional,
+            'codigo' => $u->codUsuario,
+            'nome' => $nome,
+            'inicial' => mb_strtoupper(mb_substr($nome, 0, 1)),
+            'foto' => $foto,
+            'subtitulo' => $subtitulo,
         ];
     }
 
-    private function hora($data): string
+    private function hora($data)
     {
         return $data->isToday() ? $data->format('H:i') : $data->format('d/m H:i');
     }
 
-    // Só profissionais ativos e aprovados podem receber mensagens
-    private function contatoValido(int $id): ?User
+    private function contatoValido($id)
     {
-        return User::where('codProfissionalSaude', $id)
-            ->where('codProfissionalSaude', '!=', $this->eu())
-            ->where('statusConta', 'Ativa')
-            ->where('statusVerificacao', 'Aprovado')
+        $usuaria = Usuario::where('codUsuario', $id)
+            ->where('statusUsuario', 'ativa')
             ->first();
+
+        if (!$usuaria) {
+            return null;
+        }
+
+        $jaConversam = Mensagem::where('codUsuario', $id)
+            ->where('codProfissionalSaude', $this->eu())
+            ->exists();
+
+        if (!$jaConversam) {
+            return null;
+        }
+
+        return $usuaria;
     }
 
     public function conversas()
     {
         $eu = $this->eu();
 
-        $mensagens = Mensagem::where('codRemetente', $eu)
-            ->orWhere('codDestinatario', $eu)
-            ->orderByDesc('codMensagem')
+        $mensagens = Mensagem::where('codProfissionalSaude', $eu)
+            ->orderBy('codMensagem', 'desc')
             ->get();
 
         $grupos = [];
         foreach ($mensagens as $m) {
-            $outro = $m->codRemetente == $eu ? $m->codDestinatario : $m->codRemetente;
-            if (!isset($grupos[$outro])) {
-                $grupos[$outro] = ['ultima' => $m, 'naoLidas' => 0];
+            $id = $m->codUsuario;
+            if (!isset($grupos[$id])) {
+                $grupos[$id] = ['ultima' => $m, 'naoLidas' => 0];
             }
-            if ($m->codDestinatario == $eu && !$m->lidaMensagem) {
-                $grupos[$outro]['naoLidas']++;
+            if ($m->remetenteMensagem == 'usuario' && !$m->lidaMensagem) {
+                $grupos[$id]['naoLidas']++;
             }
         }
 
-        $usuarios = User::whereIn('codProfissionalSaude', array_keys($grupos))->get()->keyBy('codProfissionalSaude');
+        $usuarias = Usuario::whereIn('codUsuario', array_keys($grupos))
+            ->where('statusUsuario', 'ativa')
+            ->get()
+            ->keyBy('codUsuario');
 
         $lista = [];
         foreach ($grupos as $id => $g) {
-            if (!isset($usuarios[$id])) {
+            if (!isset($usuarias[$id])) {
                 continue;
             }
-            $lista[] = $this->usuario($usuarios[$id]) + [
+            $lista[] = $this->usuaria($usuarias[$id]) + [
                 'ultima' => $g['ultima']->textoMensagem,
-                'minha' => $g['ultima']->codRemetente == $eu,
+                'minha' => $g['ultima']->remetenteMensagem == 'profissional',
                 'hora' => $this->hora($g['ultima']->dataEnvio),
                 'naoLidas' => $g['naoLidas'],
             ];
@@ -77,56 +103,40 @@ class MensagemController extends Controller
         return response()->json($lista);
     }
 
-    public function buscar(Request $request)
-    {
-        $q = trim((string) $request->query('q', ''));
-
-        if ($q === '') {
-            return response()->json([]);
-        }
-
-        $usuarios = User::where('codProfissionalSaude', '!=', $this->eu())
-            ->where('statusConta', 'Ativa')
-            ->where('statusVerificacao', 'Aprovado')
-            ->where('nomeProfissionalSaude', 'like', '%' . $q . '%')
-            ->orderBy('nomeProfissionalSaude')
-            ->limit(15)
-            ->get();
-
-        return response()->json($usuarios->map(fn ($u) => $this->usuario($u))->values());
-    }
-
     public function mensagens($id)
     {
         $eu = $this->eu();
-        $outro = $this->contatoValido((int) $id);
+        $usuaria = $this->contatoValido((int) $id);
 
-        if (!$outro) {
-            return response()->json(['erro' => 'Profissional não encontrado.'], 404);
+        if (!$usuaria) {
+            return response()->json(['erro' => 'Conversa não encontrada.'], 404);
         }
 
-        $entre = fn ($q) => $q->where(function ($w) use ($eu, $outro) {
-            $w->where('codRemetente', $eu)->where('codDestinatario', $outro->codProfissionalSaude);
-        })->orWhere(function ($w) use ($eu, $outro) {
-            $w->where('codRemetente', $outro->codProfissionalSaude)->where('codDestinatario', $eu);
-        });
-
-        // Marca como lidas as mensagens recebidas
-        Mensagem::where('codRemetente', $outro->codProfissionalSaude)
-            ->where('codDestinatario', $eu)
+        Mensagem::where('codUsuario', $usuaria->codUsuario)
+            ->where('codProfissionalSaude', $eu)
+            ->where('remetenteMensagem', 'usuario')
             ->where('lidaMensagem', false)
             ->update(['lidaMensagem' => true]);
 
-        $mensagens = Mensagem::where($entre)->orderBy('codMensagem')->limit(300)->get();
+        $mensagens = Mensagem::where('codUsuario', $usuaria->codUsuario)
+            ->where('codProfissionalSaude', $eu)
+            ->orderBy('codMensagem')
+            ->limit(300)
+            ->get();
 
-        return response()->json([
-            'usuario' => $this->usuario($outro),
-            'mensagens' => $mensagens->map(fn ($m) => [
+        $lista = [];
+        foreach ($mensagens as $m) {
+            $lista[] = [
                 'id' => $m->codMensagem,
                 'texto' => $m->textoMensagem,
-                'minha' => $m->codRemetente == $eu,
+                'minha' => $m->remetenteMensagem == 'profissional',
                 'hora' => $this->hora($m->dataEnvio),
-            ])->values(),
+            ];
+        }
+
+        return response()->json([
+            'usuario' => $this->usuaria($usuaria),
+            'mensagens' => $lista,
         ]);
     }
 
@@ -137,15 +147,16 @@ class MensagemController extends Controller
             'texto' => 'required|string|max:2000',
         ]);
 
-        $outro = $this->contatoValido((int) $dados['destinatario']);
+        $usuaria = $this->contatoValido((int) $dados['destinatario']);
 
-        if (!$outro) {
-            return response()->json(['erro' => 'Profissional não encontrado.'], 404);
+        if (!$usuaria) {
+            return response()->json(['erro' => 'Conversa não encontrada.'], 404);
         }
 
         $m = Mensagem::create([
-            'codRemetente' => $this->eu(),
-            'codDestinatario' => $outro->codProfissionalSaude,
+            'codUsuario' => $usuaria->codUsuario,
+            'codProfissionalSaude' => $this->eu(),
+            'remetenteMensagem' => 'profissional',
             'textoMensagem' => trim($dados['texto']),
         ])->fresh();
 
