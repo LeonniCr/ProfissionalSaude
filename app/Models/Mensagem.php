@@ -10,7 +10,7 @@ class Mensagem extends Model
     protected $primaryKey = 'codMensagem';
     public $timestamps = false;
 
-    protected $fillable = ['codRemetente', 'codDestinatario', 'textoMensagem', 'lidaMensagem'];
+    protected $fillable = ['codUsuario', 'codProfissionalSaude', 'remetenteMensagem', 'textoMensagem', 'lidaMensagem'];
 
     protected $casts = [
         'lidaMensagem' => 'boolean',
