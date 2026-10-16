@@ -48,12 +48,12 @@
                         @endif
                     </a>
 
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('agenda.index') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></svg>
                         <span>Agenda</span>
                     </a>
 
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('pacientes.index') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5" /><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6" /><circle cx="17" cy="9" r="2.8" /><path d="M15 14.2c2.7.4 5 2.4 5 5.8" /></svg>
                         <span>Pacientes</span>
                     </a>
