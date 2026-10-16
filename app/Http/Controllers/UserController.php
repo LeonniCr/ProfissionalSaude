@@ -21,7 +21,7 @@ class UserController extends Controller
             'nome' => 'required|string|max:120',
             'email' => 'required|email|unique:tbprofissionalsaude,emailProfissionalSaude|max:150',
             'telefone' => 'nullable|string|max:14|unique:tbprofissionalsaude,telProfissionalSaude',
-            'senha' => 'required|string|max:255|min:8',
+            'senha' => ['required', 'string', 'min:8', 'max:255', 'confirmed', 'regex:/\p{Ll}/u', 'regex:/\p{Lu}/u', 'regex:/\p{N}/u', 'regex:/[\p{Z}\p{S}\p{P}]/u'],
             'categoria' => 'required|string',
             'especialidade' => 'nullable|string|max:25',
             'apresentacao' => 'nullable|string|max:400',
@@ -48,6 +48,8 @@ class UserController extends Controller
             'senha.required' => 'Campo senha obrigatório.',
             'senha.max' => 'A senha deve ter no máximo 255 caracteres.',
             'senha.min' => 'A senha deve ter no mínimo 8 caracteres',
+            'senha.confirmed' => 'A confirmação de senha não confere.',
+            'senha.regex' => 'A senha deve ter letra maiúscula, minúscula, número e caractere especial.',
 
             'categoria.required' => 'Campo categoria obrigatório.',
             'especialidade.max' => 'A especialidade deve ter no máximo 25 caracteres.',
