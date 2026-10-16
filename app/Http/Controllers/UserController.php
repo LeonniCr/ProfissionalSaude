@@ -372,18 +372,19 @@ class UserController extends Controller
     {
         $request->validate([
             'senhaAtual' => 'required|min:8',
-            'novaSenha' => 'required|min:8',
-            'confirmarSenha' => 'required|same:novaSenha|min:8',
-        ],[
-            'senhaAtual.required'=> 'Campo senha atual obrigatório.',
+            'novaSenha' => ['required', 'string', 'min:8', 'max:255', 'regex:/\p{Ll}/u', 'regex:/\p{Lu}/u', 'regex:/\p{N}/u', 'regex:/[\p{Z}\p{S}\p{P}]/u'],
+            'confirmarSenha' => 'required|same:novaSenha',
+        ], [
+            'senhaAtual.required' => 'Campo senha atual obrigatório.',
             'senhaAtual.min' => 'A senha atual deve ter no mínimo 8 caracteres.',
 
-            'novaSenha.required'=> 'Campo nova senha obrigatório.',
+            'novaSenha.required' => 'Campo nova senha obrigatório.',
             'novaSenha.min' => 'A nova senha deve ter no mínimo 8 caracteres.',
+            'novaSenha.max' => 'A nova senha deve ter no máximo 255 caracteres.',
+            'novaSenha.regex' => 'A nova senha deve ter letra maiúscula, minúscula, número e caractere especial.',
 
-            'confirmarSenha.required'=> 'Campo confirmar senha obrigatório.',
-            'confirmarSenha.same'=> 'Os campos nova senha e confirmar senha devem ser iguais.',
-            'confirmarSenha.min' => 'A nova senha deve ter no mínimo 8 caracteres.',
+            'confirmarSenha.required' => 'Campo confirmar senha obrigatório.',
+            'confirmarSenha.same' => 'Os campos nova senha e confirmar senha devem ser iguais.',
         ]);
 
         $profissional = User::find(session('id'));
@@ -391,6 +392,12 @@ class UserController extends Controller
         if (!Hash::check($request->senhaAtual, $profissional->senhaProfissionalSaude)) {
             return back()->withErrors([
                 'senhaAtual' => 'A senha atual está incorreta.'
+            ]);
+        }
+
+        if (Hash::check($request->novaSenha, $profissional->senhaProfissionalSaude)) {
+            return back()->withErrors([
+                'novaSenha' => 'A nova senha não pode ser igual à senha atual.'
             ]);
         }
 
