@@ -129,7 +129,22 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="field-hint">Use letras, números e símbolos.</p>
+                        <div class="senha-forca">
+                            <div class="senha-forca-topo">
+                                <span>Força da senha</span>
+                                <strong id="senhaForcaTexto">—</strong>
+                            </div>
+                            <div class="senha-forca-barra"><span id="senhaForcaBarra"></span></div>
+                        </div>
+
+                        <ul class="senha-regras" id="senhaRegras">
+                            <li data-regra="tamanho">Mínimo de 8 caracteres</li>
+                            <li data-regra="minuscula">Uma letra minúscula</li>
+                            <li data-regra="maiuscula">Uma letra maiúscula</li>
+                            <li data-regra="numero">Um número</li>
+                            <li data-regra="especial">Um caractere especial (!@#$%...)</li>
+                            <li data-regra="igual">As senhas devem ser iguais</li>
+                        </ul>
 
                         <div class="field">
                             <label for="apresentacao">Apresentação</label>
@@ -479,27 +494,81 @@
         })();
 
                 // Máscara de telefone: "11 97728-2760"
-        function formatarTelefone(valor) {
-            valor = valor.replace(/\D/g, '').slice(0, 11);
+                (function () {
+                    var senha = document.getElementById('senha');
+                    var conf = document.getElementById('senha_confirmation');
+                    if (!senha || !conf) return;
 
-            if (valor.length <= 2) {
-                return valor;
-            }
-            if (valor.length <= 6) {
-                return valor.slice(0, 2) + ' ' + valor.slice(2);
-            }
-            if (valor.length <= 10) {
-                return valor.slice(0, 2) + ' ' + valor.slice(2, 6) + '-' + valor.slice(6);
-            }
-            return valor.slice(0, 2) + ' ' + valor.slice(2, 7) + '-' + valor.slice(7);
-        }
+                    var regras = {
+                        tamanho:   function (s) { return s.length >= 8; },
+                        minuscula: function (s) { return /\p{Ll}/u.test(s); },
+                        maiuscula: function (s) { return /\p{Lu}/u.test(s); },
+                        numero:    function (s) { return /\p{N}/u.test(s); },
+                        especial:  function (s) { return /[\p{Z}\p{S}\p{P}]/u.test(s); }
+                    };
+                    var nomes = { '': '—', fraca: 'Fraca', media: 'Média', forte: 'Forte' };
 
-        var telefoneInput = document.getElementById('telefone');
-        if (telefoneInput) {
-            telefoneInput.addEventListener('input', function () {
-                this.value = formatarTelefone(this.value);
-            });
-        }
+                    var itens = document.querySelectorAll('#senhaRegras li');
+                    var itemIgual = document.querySelector('#senhaRegras li[data-regra="igual"]');
+                    var barra = document.getElementById('senhaForcaBarra');
+                    var texto = document.getElementById('senhaForcaTexto');
+                    var aviso = document.getElementById('senhaMatch');
+
+                    function avaliarSenha() {
+                        var v = senha.value, ok = 0;
+
+                        itens.forEach(function (li) {
+                            if (!regras[li.dataset.regra]) return; // "igual" é tratado na confirmação
+                            var passou = regras[li.dataset.regra](v);
+                            li.classList.toggle('ok', passou);
+                            if (passou) ok++;
+                        });
+
+                        var nivel = v === '' ? '' : (ok === 5 ? 'forte' : (ok >= 3 ? 'media' : 'fraca'));
+                        barra.style.width = (v === '' ? 0 : ok / 5 * 100) + '%';
+                        barra.className = nivel ? 'nivel-' + nivel : '';
+                        texto.textContent = nomes[nivel];
+                        texto.className = nivel ? 'nivel-' + nivel : '';
+
+                        senha.classList.toggle('campo-erro', v !== '' && ok < 5);
+                        senha.classList.toggle('campo-ok', ok === 5);
+                        // Bloqueia o botão "Próximo" enquanto a senha não for forte
+                        senha.setCustomValidity(ok === 5 ? '' : 'A senha precisa ter 8 caracteres, letra maiúscula, minúscula, número e caractere especial.');
+                    }
+
+                    function avaliarConfirmacao() {
+                        var b = conf.value;
+                        var iguais = b !== '' && b === senha.value;
+
+                        if (itemIgual) itemIgual.classList.toggle('ok', iguais);
+
+                        aviso.className = 'senha-match';
+                        conf.classList.remove('campo-erro', 'campo-ok');
+
+                        if (b === '') {
+                            aviso.textContent = '';
+                            conf.setCustomValidity('');
+                            return;
+                        }
+
+                        if (iguais) {
+                            aviso.textContent = '✓ As senhas coincidem';
+                            aviso.classList.add('ok');
+                            conf.classList.add('campo-ok');
+                            conf.setCustomValidity('');
+                        } else {
+                            aviso.textContent = 'As senhas não coincidem';
+                            aviso.classList.add('erro');
+                            conf.classList.add('campo-erro');
+                            conf.setCustomValidity('As senhas não coincidem.');
+                        }
+                    }
+
+                    senha.addEventListener('input', function () { avaliarSenha(); avaliarConfirmacao(); });
+                    conf.addEventListener('input', avaliarConfirmacao);
+                    avaliarSenha();
+                    avaliarConfirmacao();
+                })();
     </script>
 
 </body>
