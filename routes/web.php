@@ -7,6 +7,7 @@ use App\Http\Controllers\MensagemController;
 use App\Http\Controllers\ConteudoController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\RelatorioController;
 
 
 //Públicas
@@ -51,6 +52,9 @@ Route::get('/agenda/consultas/{id}/editar', [AgendaController::class, 'editar'])
 Route::put('/agenda/consultas/{id}', [AgendaController::class, 'atualizar'])->name('agenda.consultas.atualizar');
 
 Route::get('/pacientes', [PacienteController::class, 'index'])->name('pacientes.index');
+
+Route::get('/relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');
+Route::get('/relatorios/exportar', [RelatorioController::class, 'exportar'])->name('relatorios.exportar');
 
 Route::get('/suporte', [UserController::class, 'suporte'])->name('painel.suporte');
     
