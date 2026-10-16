@@ -67,7 +67,7 @@
                         <span>Conteúdos</span>
                     </a>
 
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('relatorios.index') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M12 20V4M20 20v-7" /></svg>
                         <span>Relatórios</span>
                     </a>
