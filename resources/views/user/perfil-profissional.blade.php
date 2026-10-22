@@ -11,12 +11,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="{{ asset('js/sidebar.js') }}"></script>
+    <script src="{{ asset('js/preferencias.js?v=2') }}"></script>
 </head>
 
 <body>
 
     @php
-        $inicial = strtoupper(substr($profissional->nomeProfissional ?? 'P', 0, 1));
+        $inicial = strtoupper(substr($profissional->nomeProfissionalSaude ?? 'P', 0, 1));
     @endphp
 
     <div class="app-shell">
@@ -39,32 +41,26 @@
                         <span>Painel</span>
                     </a>
 
-                    <a href="#" class="nav-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
-                        <span>Caixa de Entrada</span>
-                        <span class="nav-badge">5</span>
-                    </a>
-
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('agenda.index') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></svg>
                         <span>Agenda</span>
-                    </a>
-
-                    <a href="#" class="nav-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5" /><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6" /><circle cx="17" cy="9" r="2.8" /><path d="M15 14.2c2.7.4 5 2.4 5 5.8" /></svg>
-                        <span>Pacientes</span>
                     </a>
                 </div>
 
                 <div class="nav-group">
                     <p class="nav-group-label">Gestão</p>
 
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('conteudos.index') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
                         <span>Conteúdos</span>
                     </a>
 
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('feedback.index') }}" class="nav-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-5 4V5a1 1 0 0 1 1-1Z" /><path d="M8 9h8M8 12.5h5" /></svg>
+                        <span>Feedback</span>
+                    </a>
+
+                    <a href="{{ route('relatorios.index') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M12 20V4M20 20v-7" /></svg>
                         <span>Relatórios</span>
                     </a>
@@ -73,11 +69,7 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 1 1-3.2-6.4L21 4l-1 4.6c.6 1 1 2.2 1 3.4Z" /></svg>
                         <span>Fórum</span>
                     </a>
-
-                    <a href="#" class="nav-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8l10-5 10 5-10 5-10-5Z" /><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" /></svg>
-                        <span>Aprender</span>
-                    </a>
+                    
                 </div>
 
                 <div class="nav-group">
@@ -88,12 +80,12 @@
                         <span>Meu Perfil</span>
                     </a>
 
-                    <a href="#" class="nav-item">
+                    <a href="{{ url('/configuracoes') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3" /><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z" /></svg>
                         <span>Configurações</span>
                     </a>
 
-                    <a href="#" class="nav-item">
+                    <a href="{{ url('/suporte') }}" class="nav-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" /><path d="M9.5 9.2a2.5 2.5 0 1 1 3.6 2.3c-.8.4-1.1 1-1.1 1.9" /><path d="M12 17h.01" /></svg>
                         <span>Suporte</span>
                     </a>
@@ -103,7 +95,11 @@
 
             <div class="sidebar-footer">
                 <div class="sidebar-user">
-                    <span class="avatar-circle">{{ $inicial }}</span>
+                    @if (!empty($profissional->fotoPerfilProfissional))
+                        <img class="avatar-circle" src="{{ asset('storage/' . $profissional->fotoPerfilProfissional) }}" alt="Foto do profissional">
+                    @else
+                        <span class="avatar-circle">{{ $inicial }}</span>
+                    @endif
                     <div class="sidebar-user-info">
                         <strong>{{ $profissional->nomeProfissionalSaude }}</strong>
                         <span>{{ $profissional->especialidadeProfissionalSaude }}</span>
@@ -133,18 +129,45 @@
                 </div>
 
                 <div class="topbar-right">
-                    <svg class="topbar-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
+                    <a href="{{ url('/caixa-de-entrada') }}" style="display: inline-flex; align-items: center; text-decoration: none; color: inherit;">
+                        <svg class="topbar-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" /><path d="M13.7 21a2 2 0 0 1-3.4 0" /></svg>
+                    </a>
 
+                    
                     <div class="topbar-user">
-                        <span class="avatar-circle">{{ $inicial }}</span>
+                        <div class="avatar-circle" style="margin: 0 auto 10px;">
+                            @if (!empty($profissional->fotoPerfilProfissional))
+                                <img 
+                                    class="avatar-circle avatar-lg"
+                                    src="{{ asset('storage/' . $profissional->fotoPerfilProfissional) }}"
+                                    alt="Foto do profissional"
+                                >
+                            @else
+                                <span class="avatar-circle avatar-lg">
+                                    {{ $inicial }}
+                                </span>
+                            @endif
+                        </div>
                         <div class="topbar-user-info">
-                            <strong>{{ $profissional->nomeProfissionalSaude }}</strong>
+                            <a href="{{ url('user.perfil-profissional') }}" style="text-decoration: none;">
+                                <strong>{{ $profissional->nomeProfissionalSaude }}</strong>
+                            </a>
                         </div>
                     </div>
                 </div>
             </header>
 
-            <main class="page-content">
+            <main class="page-content pf-page">
+
+                @if (session('sucesso'))
+                    <div class="toast-sucesso" id="toastSucesso" role="status">
+                        <span class="toast-icone">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                        </span>
+                        <span>{{ session('sucesso') }}</span>
+                        <button type="button" class="toast-fechar" onclick="fecharToast()" aria-label="Fechar">&times;</button>
+                    </div>
+                @endif
 
                 <div class="page-header">
                     <div>
@@ -169,112 +192,155 @@
                     </div>
                 @endif
 
-                <div class="profile-grid">
+                <div class="pf-grid">
 
-                    {{-- ===================== DADOS DO PERFIL (SOMENTE LEITURA) ===================== --}}
-                    <div class="profile-card">
+                    {{-- ============ COLUNA PRINCIPAL ============ --}}
+                    <div class="pf-main">
 
-                        <div class="profile-card-head">
-                            <div>
-                                <h2>{{ $profissional->nomeProfissionalSaude }}</h2>
-                                <p>Dados profissionais &middot; Estas informações aparecem no perfil público.</p>
-                            </div>
+                        {{-- Hero --}}
+                        <section class="pf-card">
+                            <div class="pf-cover"></div>
+                            <div class="pf-hero">
+                                <div class="pf-hero-row">
+                                    <div class="pf-avatar-wrap">
+                                        @if (!empty($profissional->fotoPerfilProfissional))
+                                            <img class="pf-avatar" src="{{ asset('storage/' . $profissional->fotoPerfilProfissional) }}" alt="Foto do profissional">
+                                        @else
+                                            <span class="pf-avatar">{{ $inicial }}</span>
+                                        @endif
 
-                            <div class="profile-actions">
-                                <a href="{{ url('user.mudar-senha') }}" class="btn-outline-sm">Trocar senha</a>
-                                <a href="{{ url('user.update-profissional') }}" class="btn-outline-sm">Editar perfil</a>
-                            </div>
-                        </div>
+                                        <div class="pf-photo-help">
+                                            <a href="{{ url('user.update-profissional') }}" class="btn-outline-sm">Trocar foto</a>
+                                            <small>JPG ou PNG, até 5MB</small>
+                                        </div>
+                                    </div>
 
-                        <div class="avatar-row">
-                            <span class="avatar-circle avatar-lg">{{ $inicial }}</span>
-                            <div class="avatar-row-info">
-                                <a href="{{ url('user.update-profissional') }}" class="btn-outline-sm">Trocar foto</a>
-                                <span>JPG ou PNG &middot; até 5MB</span>
-                            </div>
-                        </div>
+                                    <div class="pf-actions">
+                                        <a href="{{ url('user.mudar-senha') }}" class="btn-outline-sm">Trocar senha</a>
+                                        <a href="{{ url('user.update-profissional') }}" class="btn-primary-sm">Editar perfil</a>
+                                    </div>
+                                </div>
 
-                        <div class="field-view" style="margin-bottom: 20px;">
-                            <div>
-                                <label>Email</label>
-                                <div class="field-display">{{ $profissional->emailProfissionalSaude }}</div>
+                                <div class="pf-identity">
+                                    <h2>{{ $profissional->nomeProfissionalSaude }}</h2>
+                                    <div class="pf-identity-meta">
+                                        @if (!empty($profissional->especialidadeProfissionalSaude))
+                                            <span class="pf-chip">{{ $profissional->especialidadeProfissionalSaude }}</span>
+                                        @endif
+                                        <span class="pf-chip pf-chip--ok">Verificado</span>
+                                    </div>
+                                    <p>Estas informações aparecem no seu perfil público.</p>
+                                </div>
                             </div>
-                        </div>
+                        </section>
 
-                        <div class="field-grid-2 field-view">
-                            <div>
-                                <label>Telefone</label>
-                                <div class="field-display">{{ $profissional->telProfissionalSaude ?? '-' }}</div>
-                            </div>
+                        {{-- Contato --}}
+                        <section class="pf-card pf-section">
+                            <h3 class="pf-section-title">Contato e documento</h3>
+                            <dl class="pf-fields">
+                                <div class="pf-field pf-field--full">
+                                    <dt>Email</dt>
+                                    <dd>{{ $profissional->emailProfissionalSaude }}</dd>
+                                </div>
+                                <div class="pf-field">
+                                    <dt>Telefone</dt>
+                                    <dd data-formato="telefone" class="{{ empty($profissional->telProfissionalSaude) ? 'is-empty' : '' }}">{{ $profissional->telProfissionalSaude ?? '-' }}</dd>
+                                </div>
+                                <div class="pf-field">
+                                    <dt>CPF ou CNPJ</dt>
+                                    <dd class="{{ empty($profissional->nrFiscalProfissional) ? 'is-empty' : '' }}">{{ $profissional->nrFiscalProfissional ?? '-' }}</dd>
+                                </div>
+                            </dl>
+                        </section>
 
-                            <div>
-                                <label>CPF ou CNPJ</label>
-                                <div class="field-display">{{ $profissional->nrFiscalProfissional ?? '-' }}</div>
-                            </div>
-                        </div>
+                        {{-- Localização --}}
+                        <section class="pf-card pf-section">
+                            <h3 class="pf-section-title">Localização</h3>
+                            <dl class="pf-fields">
+                                <div class="pf-field">
+                                    <dt>CEP</dt>
+                                    <dd data-formato="cep" class="{{ empty($profissional->cepProfissional) ? 'is-empty' : '' }}">{{ $profissional->cepProfissional ?? '-' }}</dd>
+                                </div>
+                                <div class="pf-field">
+                                    <dt>UF</dt>
+                                    <dd class="{{ empty($profissional->ufProfissional) ? 'is-empty' : '' }}">{{ $profissional->ufProfissional ?? '-' }}</dd>
+                                </div>
+                                <div class="pf-field">
+                                    <dt>Cidade</dt>
+                                    <dd class="{{ empty($profissional->cidadeProfissional) ? 'is-empty' : '' }}">{{ $profissional->cidadeProfissional ?? '-' }}</dd>
+                                </div>
+                                <div class="pf-field">
+                                    <dt>País</dt>
+                                    <dd class="{{ empty($profissional->paisProfissional) ? 'is-empty' : '' }}">{{ $profissional->paisProfissional ?? '-' }}</dd>
+                                </div>
+                                <div class="pf-field">
+                                    <dt>Rua</dt>
+                                    <dd class="{{ empty($profissional->ruaProfissional) ? 'is-empty' : '' }}">{{ $profissional->ruaProfissional ?? '-' }}</dd>
+                                </div>
+                                <div class="pf-field">
+                                    <dt>Número</dt>
+                                    <dd class="{{ empty($profissional->numeroProfissional) ? 'is-empty' : '' }}">{{ $profissional->numeroProfissional ?? '-' }}</dd>
+                                </div>
+                                <div class="pf-field pf-field--full">
+                                    <dt>Complemento</dt>
+                                    <dd class="{{ empty($profissional->complementoProfissional) ? 'is-empty' : '' }}">{{ $profissional->complementoProfissional ?? '-' }}</dd>
+                                </div>
+                            </dl>
+                        </section>
 
-                        <div class="field-grid-2 field-view">
-                            <div>
-                                <label>CEP</label>
-                                <div class="field-display">{{ $profissional->cepProfissional ?? '-' }}</div>
-                            </div>
-                            <div>
-                                <label>UF</label>
-                                <div class="field-display">{{ $profissional->ufProfissional ?? '-' }}</div>
-                            </div>
-                        </div>
+                        {{-- Atuação --}}
+                        <section class="pf-card pf-section">
+                            <h3 class="pf-section-title">Atuação profissional</h3>
+                            <dl class="pf-fields">
+                                <div class="pf-field">
+                                    <dt>Categoria profissional</dt>
+                                    <dd>{{ $profissional->categoriaProfissional }}</dd>
+                                </div>
+                                <div class="pf-field">
+                                    <dt>Especialidade</dt>
+                                    <dd class="{{ empty($profissional->especialidadeProfissionalSaude) ? 'is-empty' : '' }}">{{ $profissional->especialidadeProfissionalSaude ?? '-' }}</dd>
+                                </div>
+                                <div class="pf-field pf-field--full">
+                                    <dt>Apresentação profissional</dt>
+                                    <dd class="{{ empty($profissional->apresentacaoProfissional) ? 'is-empty' : '' }}">{{ $profissional->apresentacaoProfissional ?? '-' }}</dd>
+                                </div>
+                            </dl>
+                        </section>
 
-                        <div class="field-grid-2 field-view">
-                            <div>
-                                <label>País</label>
-                                <div class="field-display">{{ $profissional->paisProfissional ?? '-' }}</div>
-                            </div>
-                            <div>
-                                <label>Cidade</label>
-                                <div class="field-display">{{ $profissional->cidadeProfissional ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="field-grid-2 field-view">
-                            <div>
-                                <label>Categoria Profissional</label>
-                                <div class="field-display">{{ $profissional->categoriaProfissional }}</div>
-                            </div>
-                            <div>
-                                <label>Especialidade</label>
-                                <div class="field-display">{{ $profissional->especialidadeProfissionalSaude ?? '-' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="field-view" style="margin-bottom: 20px;">
-                            <label>Apresentação profissional</label>
-                            <div class="field-display" style="white-space: pre-line;">{{ $profissional->apresentacaoProfissional ?? '-' }}</div>
-                        </div>
-
-                        <div class="danger-zone">
+                        {{-- Desativar conta --}}
+                        <div class="pf-danger">
+                            <span>Ao desativar, seu perfil deixa de aparecer para as usuárias.</span>
                             <button type="button" class="link-danger" onclick="abrirModal()">Desativar conta</button>
                         </div>
 
                     </div>
 
-                    {{-- ===================== PRÉVIA DO PERFIL PÚBLICO ===================== --}}
-                    <div class="preview-card">
-                        <p class="preview-card-head">
-                            Prévia do perfil
-                            <strong>Como a usuária verá você</strong>
-                        </p>
+                    {{-- ============ PRÉVIA PÚBLICA ============ --}}
+                    <aside class="pf-side">
+                        <div class="pf-card pf-preview">
+                            <div class="pf-cover"></div>
 
-                        <span class="avatar-circle avatar-lg" style="margin: 0 auto 10px;">{{ $inicial }}</span>
+                            <p class="pf-preview-label">
+                                Prévia do perfil
+                                <strong>Como a usuária verá você</strong>
+                            </p>
 
-                        <div class="preview-verified">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" /><path d="M8 12.5l2.5 2.5L16 9.5" /></svg>
-                            Verificado
+                            @if (!empty($profissional->fotoPerfilProfissional))
+                                <img class="pf-avatar" src="{{ asset('storage/' . $profissional->fotoPerfilProfissional) }}" alt="Foto do profissional">
+                            @else
+                                <span class="pf-avatar">{{ $inicial }}</span>
+                            @endif
+
+                            <span class="pf-chip pf-chip--ok">Verificado</span>
+
+                            <p class="pf-preview-name">{{ $profissional->nomeProfissionalSaude }}</p>
+                            <p class="pf-preview-spec">{{ $profissional->especialidadeProfissionalSaude }}</p>
+
+                            @if (!empty($profissional->apresentacaoProfissional))
+                                <p class="pf-preview-bio">{{ $profissional->apresentacaoProfissional }}</p>
+                            @endif
                         </div>
-
-                        <p class="preview-name">{{ $profissional->nomeProfissionalSaude }}</p>
-                        <p class="preview-specialty">{{ $profissional->especialidadeProfissionalSaude }}</p>
-                        <p class="preview-bio">{{ $profissional->apresentacaoProfissional }}</p>
-                    </div>
+                    </aside>
 
                 </div>
 
@@ -303,6 +369,18 @@
     </div>
 
     <script>
+        function fecharToast() {
+            var toast = document.getElementById('toastSucesso');
+            if (!toast) return;
+            toast.classList.add('saindo');
+            setTimeout(function () { toast.remove(); }, 300);
+        }
+
+        // Some sozinho depois de 5 segundos
+        if (document.getElementById('toastSucesso')) {
+            setTimeout(fecharToast, 5000);
+        }
+        
         function abrirModal() {
             document.getElementById('modalDesativar').style.display = 'flex';
         }
@@ -310,6 +388,20 @@
         function fecharModal() {
             document.getElementById('modalDesativar').style.display = 'none';
         }
+    </script>
+
+    <script>
+        // Exibe telefone e CEP formatados
+        document.querySelectorAll('[data-formato]').forEach(function (el) {
+            var d = el.textContent.replace(/\D/g, '');
+            if (!d) return;
+            if (el.dataset.formato === 'telefone' && (d.length === 10 || d.length === 11)) {
+                var corte = d.length === 11 ? 7 : 6;
+                el.textContent = '(' + d.slice(0, 2) + ') ' + d.slice(2, corte) + '-' + d.slice(corte);
+            } else if (el.dataset.formato === 'cep' && d.length === 8) {
+                el.textContent = d.slice(0, 5) + '-' + d.slice(5);
+            }
+        });
     </script>
 
 </body>

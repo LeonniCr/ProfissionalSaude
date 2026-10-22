@@ -39,10 +39,15 @@ class User extends Authenticatable
         'cidadeProfissional',
         'ufProfissional',
         'cepProfissional',
+        'ruaProfissional',
+        'numeroProfissional',
+        'complementoProfissional',
         'nrFiscalProfissional',
         'fotoPerfilProfissional',
         'statusVerificacao',
         'statusConta',
+        'comprovanteConselhoClasseProfissional',
+        'documentoComplementarProfissional',
     ];
 
     /**

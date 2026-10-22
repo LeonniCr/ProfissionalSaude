@@ -16,5 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Senhas nunca são devolvidas ao formulário via old()
+        $exceptions->dontFlash(['senha', 'senha_confirmation']);
     })->create();

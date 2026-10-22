@@ -83,7 +83,10 @@
                                 placeholder="Digite sua senha"
                                 required
                             >
-                            <button type="button" class="toggle-password" data-target="senhaProfissional" aria-label="Mostrar senha">&#128065;</button>
+                            <button type="button" class="toggle-password" data-target="senhaProfissional" aria-label="Mostrar senha">
+                                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z" /><circle cx="12" cy="12" r="3" /></svg>
+                                <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.9 10.9 0 0 1 12 19c-7 0-11-7-11-7a19.8 19.8 0 0 1 5.1-5.9M9.9 4.2A10.7 10.7 0 0 1 12 4c7 0 11 7 11 7a19.7 19.7 0 0 1-3.2 4.2M1 1l22 22" /><path d="M14.1 14.1a3 3 0 1 1-4.2-4.2" /></svg>
+                            </button>
                         </div>
                     </div>
 
@@ -107,7 +110,7 @@
 
                     <p class="signup">
                         Ainda não é cadastrado?
-                        <a href="{{ url('user.cadastro') }}">Solicitar acesso</a>
+                        <a href="{{ url('user.cadastro') }}">Cadastrar</a>
                     </p>
 
                 </form>
@@ -129,7 +132,11 @@
         form.querySelectorAll('.toggle-password').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 var input = document.getElementById(btn.dataset.target);
-                input.type = input.type === 'password' ? 'text' : 'password';
+                var mostrando = input.type === 'password';
+
+                input.type = mostrando ? 'text' : 'password';
+                btn.classList.toggle('mostrando', mostrando);
+                btn.setAttribute('aria-label', mostrando ? 'Ocultar senha' : 'Mostrar senha');
             });
         });
     </script>
