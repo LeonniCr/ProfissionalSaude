@@ -153,7 +153,7 @@ MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=587
 MAIL_USERNAME=venus.saudemulher@gmail.com
-MAIL_PASSWORD= {Está com a Lívia}
+MAIL_PASSWORD=Está com a Lívia
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=venus.saudemulher@gmail.com
 MAIL_FROM_NAME="Vênus"
@@ -166,23 +166,6 @@ AWS_USE_PATH_STYLE_ENDPOINT=false
 
 VITE_APP_NAME="${APP_NAME}"
 
-## 🗂️ Estrutura do projeto
-
-```text
-app/
-├── Http/Controllers/     # Agenda, Conteúdo, Publicação, Relatório, Feedback, Usuário...
-├── Models/               # Conteudo, DataSaude, TipoCategoria, TipoConteudo, User...
-└── Mail/                 # E-mail de recuperação de senha
-database/
-├── migrations/           # Estrutura das tabelas
-└── seeders/              # Categorias, formatos e datas de saúde
-resources/views/
-├── painelProfissional/   # Telas do portal (agenda, conteúdo, relatórios...)
-├── user/                 # Cadastro, perfil e senha
-└── emails/               # Modelos de e-mail
-public/
-├── css/  js/  images/    # Estilos, scripts e imagens
-routes/web.php            # Rotas públicas e privadas (middleware autenticacao)
 ```
 
 ---
