@@ -2,85 +2,95 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\MensagemController;
-use App\Http\Controllers\ConteudoController;
-use App\Http\Controllers\AgendaController;
-use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfissionalController;
+use App\Http\Controllers\UsuariaController;
+use App\Http\Controllers\DenunciaController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\PublicacaoController;
+use App\Http\Controllers\SuporteController;
+use App\Http\Controllers\ConteudoController;
+use App\Http\Controllers\DestaqueController;
+use App\Http\Controllers\ArquivoController;
 
-
-//Públicas
+// ---------- Rotas públicas (login) ----------
 Route::get('/', [UserController::class, 'index'])->name('auth.index');
-Route::post('user.cadastro', [UserController::class, 'store'])->name('cadastro.store');
-Route::get('user.cadastro/verificar', [UserController::class, 'verificarDuplicidade'])->name('cadastro.verificar');
-Route::post('/login', [UserController::class, 'login'])->name('auth.login');
-Route::post('/logout', [UserController::class, 'logout'])->name('auth.logout');
+Route::post('/login', [UserController::class, 'login'])
+    ->middleware('throttle:10,1')
+    ->name('auth.login');
 
-Route::get('/welcome', function () {
-    return view('welcome');
-});
-
-Route::get('user.cadastro', function () {
-    return view('user.cadastro');
-});
-
-Route::get('emails.esqueci-senha', [ForgotPasswordController::class, 'index']);
-Route::post('emails.esqueci-senha', [ForgotPasswordController::class, 'enviar']);
-Route::get('emails.redefinir-senha/{chave}', [ForgotPasswordController::class, 'redefinir']);
-Route::post('emails.redefinir-senha/{chave}', [ForgotPasswordController::class, 'atualizarSenha']);
-
-
-//privadas
+// ---------- Rotas protegidas (administrador logado) ----------
 Route::middleware('autenticacao')->group(function () {
 
-Route::get('/configuracoes', [UserController::class, 'configuracoes'])->name('painel.configuracoes');
+    Route::post('/logout', [UserController::class, 'logout'])->name('auth.logout');
+    Route::post('/logout/todos', [UserController::class, 'logoutTodos'])->name('auth.logout.todos');
 
-Route::get('/caixa-de-entrada', [UserController::class, 'caixaEntrada'])->name('caixa-de-entrada');
-Route::get('/caixa-de-entrada/conversas', [MensagemController::class, 'conversas']);
-Route::get('/caixa-de-entrada/buscar', [MensagemController::class, 'buscar']);
-Route::get('/caixa-de-entrada/mensagens/{id}', [MensagemController::class, 'mensagens']);
-Route::post('/caixa-de-entrada/enviar', [MensagemController::class, 'enviar']);
+    Route::get('/painel/dashboard', [DashboardController::class, 'index'])->name('painel.dashboard');
+    Route::get('/painel/relatorio-geral', [RelatorioController::class, 'geral'])->name('painel.relatorio');
 
-Route::get('/conteudo', [ConteudoController::class, 'index'])->name('conteudos.index');
-Route::post('/conteudo', [ConteudoController::class, 'store'])->name('conteudos.store');
-Route::put('/conteudo/{id}', [ConteudoController::class, 'update'])->name('conteudos.update');
+    // Aprovação de cadastros de profissionais
+    Route::get('/painel/cadastros', [ProfissionalController::class, 'index'])->name('cadastros.index');
+    Route::post('/painel/cadastros/lote', [ProfissionalController::class, 'lote'])->name('cadastros.lote');
+    Route::get('/painel/cadastros/{id}', [ProfissionalController::class, 'show'])->name('cadastros.show');
+    Route::post('/painel/cadastros/{id}/decidir', [ProfissionalController::class, 'decidir'])->name('cadastros.decidir');
 
-Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
-Route::put('/feedback/{id}/reenviar', [FeedbackController::class, 'reenviar'])->name('feedback.reenviar');
+    // Contas de usuárias: lista, ver a conta e suspender/reativar
+    Route::get('/painel/usuarias', [UsuariaController::class, 'index'])->name('usuarias.index');
+    Route::get('/painel/usuarias/{id}', [UsuariaController::class, 'show'])->name('usuarias.show');
+    Route::patch('/painel/usuarias/{id}/status', [UsuariaController::class, 'atualizarStatus'])->name('usuarias.status');
 
-Route::get('/publicacoes', [PublicacaoController::class, 'index'])->name('publicacoes.index');
-Route::get('/publicacoes/{id}', [PublicacaoController::class, 'show'])->name('publicacoes.show');
-Route::get('/publicacoes/{id}/editar', [PublicacaoController::class, 'editar'])->name('publicacoes.editar');
-Route::put('/publicacoes/{id}', [PublicacaoController::class, 'atualizar'])->name('publicacoes.atualizar');
-Route::post('/publicacoes/{id}/duplicar', [PublicacaoController::class, 'duplicar'])->name('publicacoes.duplicar');
-Route::post('/publicacoes/{id}/arquivar', [PublicacaoController::class, 'arquivar'])->name('publicacoes.arquivar');
-Route::post('/publicacoes/{id}/desarquivar', [PublicacaoController::class, 'desarquivar'])->name('publicacoes.desarquivar');
-Route::delete('/publicacoes/{id}', [PublicacaoController::class, 'excluir'])->name('publicacoes.excluir');
+    // Contas de profissionais: só a lista (os dados completos ficam na tela de análise do cadastro)
+    Route::get('/painel/profissionais', [ProfissionalController::class, 'contas'])->name('profissionais.index');
 
-Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
+    // Denúncias: lista e decisão (resolver ou reabrir)
+    Route::get('/painel/denuncias', [DenunciaController::class, 'index'])->name('denuncias.index');
+    Route::patch('/painel/denuncias/{id}/decisao', [DenunciaController::class, 'decidir'])->name('denuncias.decidir');
 
-Route::get('/pacientes', [PacienteController::class, 'index'])->name('pacientes.index');
+    // Mensagens denunciadas (por enquanto a tela usa dados de exemplo do adm.js)
+    Route::get('/painel/mensagens-denunciadas', [DenunciaController::class, 'mensagens'])->name('mensagens.index');
 
-Route::get('/relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');
-Route::get('/relatorios/exportar', [RelatorioController::class, 'exportar'])->name('relatorios.exportar');
-Route::get('/relatorios/planilha', [RelatorioController::class, 'planilha'])->name('relatorios.planilha');
+    // Relatórios
+    Route::get('/painel/relatorios/usuarias', [RelatorioController::class, 'usuarias'])->name('relatorios.usuarias');
+    Route::get('/painel/relatorios/profissionais', [RelatorioController::class, 'profissionais'])->name('relatorios.profissionais');
+    Route::get('/painel/relatorios/atendimento', [RelatorioController::class, 'atendimento'])->name('relatorios.atendimento');
+    Route::get('/painel/relatorios/denuncias', [RelatorioController::class, 'denuncias'])->name('relatorios.denuncias');
 
-Route::get('/suporte', [UserController::class, 'suporte'])->name('painel.suporte');
-    
-Route::get('/dashboard', [UserController::class, 'dashboard'])->name('painel.dashboard');
+    // Conteúdos: lista de todos os conteúdos (só visualizar) e criação
+    Route::get('/painel/conteudos', [ConteudoController::class, 'index'])->name('conteudos.index');
+    Route::get('/painel/conteudos/criar', [ConteudoController::class, 'create'])->name('conteudos.criar');
+    Route::get('/painel/conteudos/aprovacao', [ConteudoController::class, 'aprovacao'])->name('conteudos.aprovacao');
+    Route::post('/painel/conteudos/{conteudo}/decidir', [ConteudoController::class, 'decidir'])->whereNumber('conteudo')->name('conteudos.decidir');
+    Route::post('/painel/conteudos', [ConteudoController::class, 'store'])->name('conteudos.store');
+    Route::get('/painel/conteudos/{conteudo}/editar', [ConteudoController::class, 'edit'])->whereNumber('conteudo')->name('conteudos.editar');
+    Route::put('/painel/conteudos/{conteudo}', [ConteudoController::class, 'update'])->whereNumber('conteudo')->name('conteudos.update');
+    Route::delete('/painel/conteudos/{conteudo}', [ConteudoController::class, 'destroy'])->whereNumber('conteudo')->name('conteudos.destroy');
 
-Route::get('user.perfil-profissional', [UserController::class, 'perfil']);
+    // Imagens enviadas (capas e peças): entregues direto do storage, sem precisar do public/storage
+    Route::get('/painel/arquivos/{caminho}', [ArquivoController::class, 'mostrar'])->where('caminho', '.*')->name('arquivos.mostrar');
 
-Route::get('user.update-profissional', [UserController::class, 'editar'])->name('perfil.editar');
-Route::put('user.update-profissional', [UserController::class, 'atualizar'])->name('perfil.atualizar');
+    // Destaque sazonal: lista, criar (publica direto) e editar
+    Route::get('/painel/destaques', [DestaqueController::class, 'index'])->name('destaques.index');
+    Route::get('/painel/destaques/criar', [DestaqueController::class, 'create'])->name('destaques.criar');
+    Route::post('/painel/destaques', [DestaqueController::class, 'store'])->name('destaques.store');
+    Route::get('/painel/destaques/{destaque}/editar', [DestaqueController::class, 'edit'])->whereNumber('destaque')->name('destaques.edit');
+    Route::put('/painel/destaques/{destaque}', [DestaqueController::class, 'update'])->whereNumber('destaque')->name('destaques.update');
 
+    // Atendimento: feedbacks e chamados de suporte
+    Route::get('/painel/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
+    Route::post('/painel/feedbacks/{feedback}/responder', [FeedbackController::class, 'responder'])->whereNumber('feedback')->name('feedbacks.responder');
+    Route::post('/painel/feedbacks/{feedback}/analisar', [FeedbackController::class, 'analisar'])->whereNumber('feedback')->name('feedbacks.analisar');
+    Route::get('/painel/suporte', [SuporteController::class, 'index'])->name('suporte.index');
 
-Route::get('user.mudar-senha', [UserController::class, 'mudarSenha']);
-Route::put('user.mudar-senha', [UserController::class, 'atualizarSenha'])->name('senha.atualizar');
+    // Perfil: visualizar, editar e excluir (suspender) a conta
+    Route::get('/perfil', [UserController::class, 'perfil'])->name('perfil');
+    Route::get('/perfil/editar', [UserController::class, 'editar'])->name('perfil.editar');
+    Route::put('/perfil/editar', [UserController::class, 'atualizar'])->name('perfil.atualizar');
+    Route::get('/perfil/senha', [UserController::class, 'senha'])->name('perfil.senha');
+    Route::put('/perfil/senha', [UserController::class, 'atualizarSenha'])
+        ->middleware('throttle:5,1')
+        ->name('perfil.senha.atualizar');
+    Route::put('/perfil/excluir', [UserController::class, 'excluirConta'])->name('perfil.excluir');
 
-Route::put('/desativar-conta', [UserController::class, 'desativarConta'])->name('conta.desativar');
-
+    // Configurações (conta, segurança, aparência, notificações)
+    Route::get('/configuracoes', [UserController::class, 'configuracoes'])->name('configuracoes');
 });
