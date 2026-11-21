@@ -41,13 +41,6 @@ class UserController extends Controller
 
     public function store(CadastroProfissionalRequest $request)
     {
-
-        $caminhoFoto = null;
-        if ($request->hasFile('fotoPerfil')) {
-            $caminhoFoto = $request->file('fotoPerfil')
-                ->store('fotos-profissionais', 'public');
-        }
-
         $request->validate([
             'nome' => 'required|string|max:120',
             'email' => 'required|email|unique:tbprofissionalsaude,emailProfissionalSaude|max:150',
@@ -55,6 +48,7 @@ class UserController extends Controller
             'senha' => ['required', 'string', 'min:8', 'max:255', 'confirmed', 'regex:/\p{Ll}/u', 'regex:/\p{Lu}/u', 'regex:/\p{N}/u', 'regex:/[\p{Z}\p{S}\p{P}]/u'],
             'categoria' => 'required|string',
             'especialidade' => 'nullable|string|max:25',
+            'conselho' => 'nullable|string|max:50',
             'apresentacao' => 'nullable|string|max:400',
             'pais' => 'nullable|string|max:60',
             'cidade' => 'nullable|string|max:100',
@@ -87,6 +81,7 @@ class UserController extends Controller
 
             'categoria.required' => 'Campo categoria obrigatório.',
             'especialidade.max' => 'A especialidade deve ter no máximo 25 caracteres.',
+            'conselho.max' => 'O conselho de classe deve ter no máximo 50 caracteres.',
             'apresentacao.max' => 'A apresentação deve ter no máximo 400 caracteres.',
 
             'pais.max' => 'O país deve ter no máximo 60 caracteres',
@@ -122,12 +117,17 @@ class UserController extends Controller
                 ->withInput();
         }
 
-        $caminhoFoto = null;
-        if ($request->hasFile('fotoPerfil')) {
-            $caminhoFoto = $request->file('fotoPerfil')
-                ->store('fotos-profissionais', 'public');
-        }
+        $caminhoFoto = $request->hasFile('fotoPerfil')
+            ? $request->file('fotoPerfil')->store('fotos-profissionais', 'public')
+            : null;
 
+        $caminhoComprovante = $request->hasFile('comprovanteConselho')
+            ? $request->file('comprovanteConselho')->store('documentos-profissionais', 'public')
+            : null;
+
+        $caminhoDocumento = $request->hasFile('docComplementar')
+            ? $request->file('docComplementar')->store('documentos-profissionais', 'public')
+            : null;
 
         User::create([
             'nomeProfissionalSaude' => $request->nome,
@@ -139,6 +139,7 @@ class UserController extends Controller
             'googleIdProfissional' => null,
             'categoriaProfissional' => $request->categoria,
             'especialidadeProfissionalSaude' => $request->especialidade,
+            'conselhoClasseProfissionalSaude' => $request->conselho,
             'apresentacaoProfissional' => $request->apresentacao,
             'paisProfissional' => $request->pais,
             'cidadeProfissional'=> $request->cidade,
@@ -150,9 +151,10 @@ class UserController extends Controller
             'nrFiscalProfissional'=>$request->nrFiscal,
             'fotoPerfilProfissional' => $caminhoFoto,
             'statusVerificacao' => 'Em análise',
+            'motivoVerificacao' => null,
             'statusConta' => 'Ativa',
-            'comprovanteConselhoClasseProfissional' => $request->comprovanteConselho,
-            'documentoComplementarProfissional' => $request->docComplementar,
+            'comprovanteConselhoClasseProfissional' => $caminhoComprovante,
+            'documentoComplementarProfissional' => $caminhoDocumento,
         ]);
 
         return redirect('/')->with('sucesso', 'Conta criada com sucesso!');
@@ -283,9 +285,11 @@ class UserController extends Controller
         }elseif ($user && $user->statusConta == 'Excluída') {
             return redirect('/')->with('erro', 'Esta conta não existe.');
         }elseif ($user && $user->statusVerificacao == 'Em análise') {
-            return redirect('/')->with('erro', 'Esta conta está em análise.');
+            return redirect('/')->with('erro', 'Esta conta ainda está em análise.');
+        }elseif ($user && $user->statusVerificacao == 'Pendência' && $user->statusConta == 'Suspensa') {
+            return redirect('/')->with('erro', 'Seu cadastro foi recusado. O motivo foi enviado para o seu e-mail.');
         }elseif ($user && $user->statusVerificacao == 'Pendência') {
-            return redirect('/')->with('erro', 'Esta conta está pendente.');
+            return redirect('/')->with('erro', 'Precisamos que você reenvie alguns documentos. Use o link enviado para o seu e-mail.');
         } elseif ($user && $user->statusConta == 'Suspensa') {
             return redirect('/')->with('erro', 'Esta conta está suspensa.');
         } elseif (!Hash::check($request->senha, $user->senhaProfissionalSaude)) {
@@ -395,8 +399,15 @@ class UserController extends Controller
         $profissional->ruaProfissional = $request->rua;
         $profissional->numeroProfissional = $request->numero;
         $profissional->complementoProfissional = $request->complemento;
-        $profissional->comprovanteConselhoClasseProfissional = $request->comprovanteConselho;
-        $profissional->documentoComplementarProfissional = $request->docComplementar;
+        if ($request->hasFile('comprovanteConselho')) {
+            $profissional->comprovanteConselhoClasseProfissional =
+                $request->file('comprovanteConselho')->store('documentos-profissionais', 'public');
+        }
+
+        if ($request->hasFile('docComplementar')) {
+            $profissional->documentoComplementarProfissional =
+                $request->file('docComplementar')->store('documentos-profissionais', 'public');
+        }
         // Atualiza a foto somente se o usuário enviar uma nova
         if ($request->hasFile('fotoPerfil')) {
             $foto = $request->file('fotoPerfil')->store('fotos/perfil', 'public');
