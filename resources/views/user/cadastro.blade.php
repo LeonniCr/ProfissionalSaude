@@ -17,7 +17,7 @@
 
     @php
         $camposPasso1 = ['nome', 'email', 'telefone', 'nrFiscal', 'senha', 'senha_confirmation', 'apresentacao', 'fotoPerfil'];
-        $camposPasso2 = ['categoria', 'especialidade', 'cep', 'rua', 'numero', 'complemento', 'pais', 'cidade', 'uf'];
+        $camposPasso2 = ['categoria', 'especialidade', 'conselho', 'cep', 'rua', 'numero', 'complemento', 'pais', 'cidade', 'uf'];
         $passoInicial = 1;
         if ($errors->any() && !$errors->hasAny($camposPasso1) && $errors->hasAny($camposPasso2)) {
             $passoInicial = 2;
@@ -206,6 +206,11 @@
                                 <input type="text" name="especialidade" id="especialidade" placeholder="Ex: Ginecologista" maxlength="25" value="{{ old('especialidade') }}" class="{{ $errors->has('especialidade') ? 'campo-erro' : '' }}">
                             </div>
                         </div>
+
+                        <div class="field">
+                            <label for="conselho">Conselho de classe</label>
+                            <input type="text" name="conselho" id="conselho" placeholder="Ex: CRM, CRP, COREN" maxlength="50" value="{{ old('conselho') }}" class="{{ $errors->has('conselho') ? 'campo-erro' : '' }}">
+                        </div>
                         
                         <div class="field">
                             <label for="cep">CEP</label>
@@ -345,6 +350,10 @@
                             <div class="review-item">
                                 <span class="review-label">Especialidade</span>
                                 <span class="review-value" data-review="especialidade">—</span>
+                            </div>
+                            <div class="review-item">
+                                <span class="review-label">Conselho de classe</span>
+                                <span class="review-value" data-review="conselho">—</span>
                             </div>
                             <!-- <div class="review-item">
                                 <span class="review-label">Conselho</span>
@@ -554,6 +563,7 @@
                     setReview('categoria', categoriaSelect.options[categoriaSelect.selectedIndex]?.text);
 
                     setReview('especialidade', get('especialidade').value);
+                    setReview('conselho', get('conselho').value);
 
                     /*var conselhoSelect = get('conselho');
                     var ufSelect = get('ufConselho');
@@ -777,6 +787,9 @@
                         v = v.trim();
                         if (!v) return '';
                         return v.length < 3 ? 'A especialidade deve ter no mínimo 3 caracteres.' : '';
+                    }],
+                    ['conselho', function (v) {
+                        return v.trim().length > 50 ? 'O conselho de classe deve ter no máximo 50 caracteres.' : '';
                     }],
                     ['cep', function (v) {
                         if (!v.trim()) return '';
