@@ -34,6 +34,7 @@ class User extends Authenticatable
         'googleIdProfissional',
         'categoriaProfissional',
         'especialidadeProfissionalSaude',
+        'conselhoClasseProfissionalSaude',
         'apresentacaoProfissional',
         'paisProfissional',
         'cidadeProfissional',
@@ -48,6 +49,7 @@ class User extends Authenticatable
         'statusConta',
         'comprovanteConselhoClasseProfissional',
         'documentoComplementarProfissional',
+        'motivoVerificacao',
     ];
 
     /**
