@@ -296,6 +296,10 @@
                                     <dt>Especialidade</dt>
                                     <dd class="{{ empty($profissional->especialidadeProfissionalSaude) ? 'is-empty' : '' }}">{{ $profissional->especialidadeProfissionalSaude ?? '-' }}</dd>
                                 </div>
+                                <div class="pf-field">
+                                    <dt>Conselho de classe</dt>
+                                    <dd class="{{ empty($profissional->conselhoClasseProfissionalSaude) ? 'is-empty' : '' }}">{{ $profissional->conselhoClasseProfissionalSaude ?: '-' }}</dd>
+                                </div>
                                 <div class="pf-field pf-field--full">
                                     <dt>Apresentação profissional</dt>
                                     <dd class="{{ empty($profissional->apresentacaoProfissional) ? 'is-empty' : '' }}">{{ $profissional->apresentacaoProfissional ?? '-' }}</dd>
